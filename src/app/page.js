@@ -25,7 +25,7 @@ export default function Home() {
     { name: "Coca-Cola", logo: "/Coca-Cola-logo.png" },
     { name: "TCS", logo: "/tcs.png" },
     { name: "Oracle", logo: "/Oracle-Logo.png" },
-    { name: "Samsung", logo: "/google.png" }, 
+    { name: "Samsung", logo: "/google.png" },
   ];
 
   const bottomCompanies = [
@@ -41,12 +41,12 @@ export default function Home() {
     { name: "TCS", logo: "/tcs.png" },
     { name: "IBM", logo: "/IBM_Logo.png" },
     { name: "Oracle", logo: "/Oracle-Logo.png" },
-    { name: "SAP", logo: "/SAP.png" }, 
+    { name: "SAP", logo: "/SAP.png" },
   ];
 
   const bottomSponsors = [
     { name: "Google", logo: "/google.png" },
-    { name: "Microsoft", logo: "/microsoft.png" }, 
+    { name: "Microsoft", logo: "/microsoft.png" },
     { name: "Meta", logo: "/Meta-Logo.png" },
     { name: "Coca-Cola", logo: "/Coca-Cola-logo.png" },
     { name: "Google", logo: "/google.png" },
@@ -71,7 +71,6 @@ export default function Home() {
     }
   ];
 
-  // --- Cinematic Carousel Data ---
   const eventMoments = [
     { id: 1, src: "/moment-1.png" },
     { id: 2, src: "/moment-2.png" },
@@ -83,21 +82,28 @@ export default function Home() {
     { id: 8, src: "/moment-8.png" },
   ];
 
-  // --- States & Refs ---
   const [isAboutVisible, setIsAboutVisible] = useState(false);
   const [scrollY, setScrollY] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
-  
-  // Carousel Specific States
+
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const [activeSlide, setActiveSlide] = useState(0);
   const carouselRef = useRef(null);
   const slideRefs = useRef([]);
-  
+
   const aboutRef = useRef(null);
   const isAnimating = useRef(false);
   const touchStartY = useRef(0);
 
-  // 1. Standard Trackers
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [isMobileMenuOpen]);
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => { if (entry.isIntersecting) setIsAboutVisible(true); },
@@ -119,9 +125,8 @@ export default function Home() {
     };
   }, []);
 
-  // 2. Custom Scroll Timing (Hero -> About)
   useEffect(() => {
-    const SCROLL_DURATION = 1800; 
+    const SCROLL_DURATION = 1800;
     const scrollToAbout = () => {
       if (!aboutRef.current) return;
       isAnimating.current = true;
@@ -134,8 +139,8 @@ export default function Home() {
         if (!startTime) startTime = currentTime;
         const timeElapsed = currentTime - startTime;
         const progress = Math.min(timeElapsed / SCROLL_DURATION, 1);
-        const ease = progress < 0.5 
-          ? 8 * progress * progress * progress * progress 
+        const ease = progress < 0.5
+          ? 8 * progress * progress * progress * progress
           : 1 - Math.pow(-2 * progress + 2, 4) / 2;
 
         window.scrollTo(0, startY + difference * ease);
@@ -143,25 +148,26 @@ export default function Home() {
         if (timeElapsed < SCROLL_DURATION) {
           window.requestAnimationFrame(step);
         } else {
-          setTimeout(() => { isAnimating.current = false; }, 50); 
+          setTimeout(() => { isAnimating.current = false; }, 50);
         }
       };
       window.requestAnimationFrame(step);
     };
 
     const handleWheel = (e) => {
-      if (window.scrollY < 50 && e.deltaY > 0) {
+      if (window.scrollY < 50 && e.deltaY > 0 && !isMobileMenuOpen) {
         if (!isAnimating.current) {
-          e.preventDefault(); 
-          scrollToAbout();    
+          e.preventDefault();
+          scrollToAbout();
         } else {
-          e.preventDefault(); 
+          e.preventDefault();
         }
       }
     };
 
     const handleTouchStart = (e) => { touchStartY.current = e.touches[0].clientY; };
     const handleTouchMove = (e) => {
+      if (isMobileMenuOpen) return;
       const touchEndY = e.touches[0].clientY;
       const isScrollingDown = touchStartY.current > touchEndY;
       if (window.scrollY < 50 && isScrollingDown) {
@@ -183,9 +189,8 @@ export default function Home() {
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchmove', handleTouchMove);
     };
-  }, []);
+  }, [isMobileMenuOpen]);
 
-  // 3. Carousel Intersection Observer
   useEffect(() => {
     const slideObserver = new IntersectionObserver(
       (entries) => {
@@ -205,44 +210,27 @@ export default function Home() {
     return () => slideObserver.disconnect();
   }, []);
 
-  // 4. Auto-scroll carousel every 3 seconds
   useEffect(() => {
     const autoScroll = setInterval(() => {
       if (!carouselRef.current) return;
-      
-      // Check if we're at the last slide
       if (activeSlide === eventMoments.length - 1) {
-        // Loop back to first slide
-        carouselRef.current.scrollTo({
-          left: 0,
-          behavior: 'smooth'
-        });
+        carouselRef.current.scrollTo({ left: 0, behavior: 'smooth' });
       } else {
-        // Scroll to next slide
         const slideWidth = carouselRef.current.children[0].clientWidth;
         const gap = window.innerWidth < 768 ? 12 : 24;
-        carouselRef.current.scrollBy({
-          left: slideWidth + gap,
-          behavior: 'smooth'
-        });
+        carouselRef.current.scrollBy({ left: slideWidth + gap, behavior: 'smooth' });
       }
     }, 3000);
 
     return () => clearInterval(autoScroll);
-  }, [activeSlide]); // Only activeSlide as dependency
+  }, [activeSlide, eventMoments.length]);
 
-  // 5. Carousel Manual Navigation Function
   const scrollCarousel = (direction) => {
     if (!carouselRef.current) return;
-    
+
     if (direction === 'next' && activeSlide === eventMoments.length - 1) {
-      // Loop back to first slide
-      carouselRef.current.scrollTo({
-        left: 0,
-        behavior: 'smooth'
-      });
+      carouselRef.current.scrollTo({ left: 0, behavior: 'smooth' });
     } else if (direction === 'prev' && activeSlide === 0) {
-      // Loop to last slide
       const slideWidth = carouselRef.current.children[0].clientWidth;
       const gap = window.innerWidth < 768 ? 12 : 24;
       carouselRef.current.scrollTo({
@@ -252,7 +240,6 @@ export default function Home() {
     } else {
       const slideWidth = carouselRef.current.children[0].clientWidth;
       const gap = window.innerWidth < 768 ? 12 : 24;
-      
       carouselRef.current.scrollBy({
         left: direction === 'next' ? slideWidth + gap : -(slideWidth + gap),
         behavior: 'smooth'
@@ -262,17 +249,15 @@ export default function Home() {
 
   return (
     <div className="font-sans relative bg-[#0a0a0a] selection:bg-[#fca311] selection:text-white">
-      
-      {/* SCROLL PROGRESS BAR */}
-      <div 
-        className="fixed top-0 left-0 h-1 bg-black z-[60] origin-left ease-out"
+
+      <div
+        className="fixed top-0 left-0 h-1 bg-black z-[70] origin-left ease-out"
         style={{ width: `${scrollProgress * 100}%` }}
       ></div>
 
-      {/* 1. STICKY NAVBAR */}
-      <nav className="fixed top-0 z-50 w-full bg-white/20 backdrop-blur-md border-b border-black/10 shadow-sm transition-all duration-300">
+      <nav className="fixed top-0 z-[65] w-full bg-white/20 backdrop-blur-md border-b border-black/10 shadow-sm transition-all duration-300">
         <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-4 group cursor-pointer">
+          <div className="flex items-center gap-4 group cursor-pointer relative z-10">
             <div className="flex flex-col font-sans leading-none mt-1">
               <span className="font-extrabold text-[1.1rem] tracking-tight text-black">SAP INSIDE TRACK</span>
               <span className="font-semibold text-xs tracking-[0.2em] text-black/70 mt-1">KOLKATA</span>
@@ -293,25 +278,111 @@ export default function Home() {
               Register Now
             </button>
           </div>
+
+          <button
+            className="md:hidden flex flex-col justify-center items-center w-8 h-8 space-y-1.5 focus:outline-none relative z-10"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          >
+            <span className={`block w-7 h-0.5 bg-black transition-transform duration-300 ease-in-out origin-center ${isMobileMenuOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
+            <span className={`block w-7 h-0.5 bg-black transition-opacity duration-300 ease-in-out ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}></span>
+            <span className={`block w-7 h-0.5 bg-black transition-transform duration-300 ease-in-out origin-center ${isMobileMenuOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
+          </button>
         </div>
       </nav>
 
-      {/* --- THE MAIN WHITE SHEET --- */}
+      <div
+        className={`fixed inset-0 w-full h-[100dvh] bg-white/95 backdrop-blur-xl z-[60] flex flex-col items-center justify-center transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] ${isMobileMenuOpen ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-full pointer-events-none"
+          }`}
+      >
+        <div className="flex flex-col items-center gap-8 mt-10">
+          {navLinks.map((link) => (
+            <a
+              key={link.name}
+              href={link.href}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="text-3xl font-extrabold text-black tracking-wide hover:text-[#fca311] transition-colors"
+            >
+              {link.name}
+            </a>
+          ))}
+          <button className="bg-black text-[#fbb62c] px-10 py-4 rounded-full font-bold text-xl hover:bg-gray-800 transition-all shadow-lg mt-6 active:scale-95">
+            Register Now
+          </button>
+        </div>
+      </div>
+
       <main className="relative z-10 bg-white rounded-b-[2rem] md:rounded-b-[4rem] shadow-[0_30px_60px_rgba(0,0,0,0.6)]">
-        
+
         {/* 2. HERO SECTION */}
         <section className="relative h-screen w-full bg-gradient-to-b from-[#fca311] to-[#fee96e] overflow-hidden flex flex-col">
-          <div className="relative z-30 flex-1 flex flex-col items-center justify-center px-4 text-center">
-            <h1 className="font-heading font-extrabold text-6xl md:text-[5.5rem] leading-[1.1] text-black tracking-tight drop-shadow-sm flex flex-col w-full overflow-hidden">
+
+          <div className="relative z-30 flex-1 flex flex-col items-center justify-center px-4 text-center pb-12 md:pb-0">
+            <h1 className="font-heading font-extrabold text-4xl md:text-[5.5rem] leading-[1.1] text-black tracking-tight drop-shadow-sm flex flex-col w-full overflow-hidden">
               <span className="will-change-transform ease-out" style={{ transform: `translateX(-${scrollY * 0.6}px)` }}>EMPOWERING</span>
               <span className="will-change-transform ease-out" style={{ transform: `translateX(${scrollY * 0.6}px)` }}>KOLKATA</span>
             </h1>
-            <p className="mt-6 text-xl md:text-2xl font-medium text-black/80 tracking-wide">Innovate Connect Learn</p>
+            <p className="mt-4 text-lg md:text-2xl font-medium text-black/80 tracking-wide">Innovate Connect Learn</p>
           </div>
+
+          {/* Left Data Stream - Scaled down for mobile to be a subtle texture */}
+          <div className="absolute top-[35%] md:top-[40%] -translate-y-1/2 left-[-5%] md:left-[-2%] w-[20vw] md:w-[25vw] flex flex-col gap-2 md:gap-5 z-[15] pointer-events-none opacity-30 md:opacity-90 blur-[1px] md:blur-none">
+            <div className="flex gap-2 md:gap-3 items-center animate-[float-x_8s_ease-in-out_infinite]">
+              <div className="h-2 w-12 md:h-8 md:w-36 bg-white/20 backdrop-blur-md border border-white/30 rounded-full shadow-[0_4px_30px_rgba(0,0,0,0.1)]"></div>
+              <div className="h-2 w-2 md:h-8 md:w-8 bg-white/90 shadow-lg rounded-full"></div>
+            </div>
+            <div className="flex gap-2 md:gap-3 items-center animate-[float-x_10s_ease-in-out_infinite_reverse] translate-x-2 md:translate-x-4">
+              <div className="h-2 w-24 md:h-8 md:w-56 bg-[#1a1a1a] shadow-2xl rounded-full"></div>
+            </div>
+            <div className="flex gap-2 md:gap-3 items-center animate-[float-x_7s_ease-in-out_infinite]">
+              <div className="h-2 w-2 md:h-8 md:w-8 bg-gradient-to-br from-[#d97706] to-[#f59e0b] shadow-lg rounded-full"></div>
+              <div className="h-2 w-10 md:h-8 md:w-28 bg-white/20 backdrop-blur-md border border-white/30 rounded-full shadow-[0_4px_30px_rgba(0,0,0,0.1)]"></div>
+            </div>
+            <div className="flex gap-2 md:gap-3 items-center animate-[float-x_9s_ease-in-out_infinite_reverse] translate-x-4 md:translate-x-8">
+              <div className="h-2 w-8 md:h-8 md:w-24 bg-white/90 shadow-lg rounded-full"></div>
+              <div className="h-2 w-2 md:h-8 md:w-8 bg-[#1a1a1a] shadow-lg rounded-full"></div>
+            </div>
+            <div className="flex gap-2 md:gap-3 items-center animate-[float-x_11s_ease-in-out_infinite] translate-x-[-10%]">
+              <div className="h-2 w-28 md:h-8 md:w-64 bg-white/20 backdrop-blur-md border border-white/30 rounded-full shadow-[0_4px_30px_rgba(0,0,0,0.1)]"></div>
+            </div>
+            <div className="flex gap-2 md:gap-3 items-center animate-[float-x_8s_ease-in-out_infinite_reverse]">
+              <div className="h-2 w-6 md:h-8 md:w-16 bg-[#1a1a1a] rounded-full"></div>
+              <div className="h-2 w-14 md:h-8 md:w-32 bg-gradient-to-br from-[#d97706] to-[#f59e0b] shadow-lg rounded-full"></div>
+            </div>
+          </div>
+
+          {/* Right Data Stream - Scaled down for mobile */}
+          <div className="absolute top-[40%] md:top-[40%] -translate-y-1/2 right-[-5%] md:right-[-2%] w-[20vw] md:w-[25vw] flex flex-col items-end gap-2 md:gap-5 z-[15] pointer-events-none opacity-30 md:opacity-90 blur-[1px] md:blur-none">
+            <div className="flex justify-end gap-2 md:gap-3 items-center animate-[float-x_9s_ease-in-out_infinite_reverse]">
+              <div className="h-2 w-2 md:h-8 md:w-8 bg-white/90 shadow-lg rounded-full"></div>
+              <div className="h-2 w-16 md:h-8 md:w-40 bg-white/20 backdrop-blur-md border border-white/30 rounded-full shadow-[0_4px_30px_rgba(0,0,0,0.1)]"></div>
+            </div>
+            <div className="flex justify-end gap-2 md:gap-3 items-center animate-[float-x_11s_ease-in-out_infinite] translate-x-[-5%]">
+              <div className="h-2 w-20 md:h-8 md:w-48 bg-[#1a1a1a] shadow-2xl rounded-full"></div>
+            </div>
+            <div className="flex justify-end gap-2 md:gap-3 items-center animate-[float-x_8s_ease-in-out_infinite_reverse] translate-x-[5%]">
+              <div className="h-2 w-12 md:h-8 md:w-32 bg-white/20 backdrop-blur-md border border-white/30 rounded-full shadow-[0_4px_30px_rgba(0,0,0,0.1)]"></div>
+              <div className="h-2 w-2 md:h-8 md:w-8 bg-gradient-to-br from-[#d97706] to-[#f59e0b] shadow-lg rounded-full"></div>
+            </div>
+            <div className="flex justify-end gap-2 md:gap-3 items-center animate-[float-x_10s_ease-in-out_infinite] translate-x-[-8%]">
+              <div className="h-2 w-2 md:h-8 md:w-8 bg-[#1a1a1a] shadow-lg rounded-full"></div>
+              <div className="h-2 w-10 md:h-8 md:w-28 bg-white/90 shadow-lg rounded-full"></div>
+            </div>
+            <div className="flex justify-end gap-2 md:gap-3 items-center animate-[float-x_7s_ease-in-out_infinite_reverse] translate-x-2 md:translate-x-4">
+              <div className="h-2 w-24 md:h-8 md:w-56 bg-white/20 backdrop-blur-md border border-white/30 rounded-full shadow-[0_4px_30px_rgba(0,0,0,0.1)]"></div>
+            </div>
+            <div className="flex justify-end gap-2 md:gap-3 items-center animate-[float-x_9s_ease-in-out_infinite]">
+              <div className="h-2 w-14 md:h-8 md:w-32 bg-gradient-to-br from-[#d97706] to-[#f59e0b] shadow-lg rounded-full"></div>
+              <div className="h-2 w-6 md:h-8 md:w-16 bg-[#1a1a1a] rounded-full"></div>
+            </div>
+          </div>
+
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-[60%] w-[800px] h-[800px] md:w-[1400px] md:h-[1400px] bg-gradient-to-t from-[#f8981d] to-[#fde047] rounded-full z-10 blur-2xl opacity-80 pointer-events-none"></div>
-          <div className="absolute bottom-0 left-0 w-full z-20 pointer-events-none translate-y-[25%] md:translate-y-[20%]">
+
+          {/* Bridge - Adjusted mobile framing so it sits higher and isn't overly zoomed */}
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[150%] md:w-full z-20 pointer-events-none translate-y-[5%] md:translate-y-[20%] flex justify-center">
             <Image src="/bridge-removebg-preview.png" alt="Howrah Bridge" width={1920} height={800} className="w-full h-auto mix-blend-multiply opacity-90" priority />
           </div>
+
           <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-[#fee96e] to-transparent z-20 pointer-events-none"></div>
         </section>
 
@@ -447,9 +518,8 @@ export default function Home() {
         </section>
 
         {/* 8. EVENT MOMENTS (PREMIUM CINEMATIC CAROUSEL) */}
-        {/* NEW: min-h-[85vh] strictly frames it in the screen, pb-40 adds a huge buffer before the footer */}
         <section className="bg-white relative flex flex-col items-center justify-center min-h-[85vh] py-24 pb-40 overflow-hidden">
-          
+
           <div className="w-full max-w-7xl mx-auto px-6 mb-12 md:mb-20 text-center">
             <div className="relative inline-block">
               <h2 className="font-heading font-extrabold text-4xl md:text-5xl lg:text-6xl text-black tracking-tight uppercase">
@@ -460,22 +530,22 @@ export default function Home() {
           </div>
 
           <div className="relative w-full group">
-            
-            <button 
-              onClick={() => scrollCarousel('prev')} 
+
+            <button
+              onClick={() => scrollCarousel('prev')}
               className="absolute left-4 md:left-12 top-1/2 -translate-y-1/2 z-30 bg-white/70 hover:bg-[#fca311] text-black w-12 h-12 rounded-full flex items-center justify-center backdrop-blur-md shadow-xl transition-all duration-300 opacity-0 group-hover:opacity-100 hidden md:flex"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" /></svg>
             </button>
 
-            <button 
-              onClick={() => scrollCarousel('next')} 
+            <button
+              onClick={() => scrollCarousel('next')}
               className="absolute right-4 md:right-12 top-1/2 -translate-y-1/2 z-30 bg-white/70 hover:bg-[#fca311] text-black w-12 h-12 rounded-full flex items-center justify-center backdrop-blur-md shadow-xl transition-all duration-300 opacity-0 group-hover:opacity-100 hidden md:flex"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" /></svg>
             </button>
 
-            <div 
+            <div
               ref={carouselRef}
               className="flex overflow-x-auto snap-x snap-mandatory gap-3 md:gap-6 px-[10vw] md:px-[20vw] py-4 [&::-webkit-scrollbar]:hidden"
               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
@@ -483,22 +553,22 @@ export default function Home() {
               {eventMoments.map((moment, index) => {
                 const isActive = activeSlide === index;
                 return (
-                  <div 
+                  <div
                     key={moment.id}
                     data-index={index}
                     ref={(el) => (slideRefs.current[index] = el)}
                     className={`
-                      shrink-0 w-[80vw] md:w-[60vw] h-[280px] md:h-[350px] snap-center rounded-xl md:rounded-[2rem] overflow-hidden relative transition-all duration-700 ease-out cursor-pointer shadow-2xl
-                      ${isActive 
+                      shrink-0 w-[80vw] md:w-[60vw] h-[280px] md:h-[400px] snap-center rounded-xl md:rounded-[2rem] overflow-hidden relative transition-all duration-700 ease-out cursor-pointer shadow-2xl
+                      ${isActive
                         ? 'scale-100 opacity-100 blur-0 grayscale-0 border-4 border-[#fca311]/50'
                         : 'scale-[0.85] opacity-40 blur-[3px] grayscale hover:grayscale-0 hover:opacity-60'}
                     `}
                   >
-                    <Image 
-                      src={moment.src} 
-                      alt={`Moment ${moment.id}`} 
-                      fill 
-                      className={`object-cover transition-transform duration-1000 ${isActive ? 'scale-100' : 'scale-110'}`} 
+                    <Image
+                      src={moment.src}
+                      alt={`Moment ${moment.id}`}
+                      fill
+                      className={`object-cover transition-transform duration-1000 ${isActive ? 'scale-100' : 'scale-110'}`}
                     />
                     {isActive && <div className="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-xl md:rounded-[2rem]"></div>}
                   </div>
@@ -508,8 +578,8 @@ export default function Home() {
 
             <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-2">
               {eventMoments.map((_, i) => (
-                <div 
-                  key={i} 
+                <div
+                  key={i}
                   className={`h-1 rounded-full transition-all duration-500 ${activeSlide === i ? 'w-8 bg-[#fca311]' : 'w-2 bg-gray-300'}`}
                 ></div>
               ))}
@@ -521,11 +591,12 @@ export default function Home() {
       </main>
 
       {/* 9. PREMIUM THEMED FOOTER (CONTACT US) */}
-      <footer className="relative w-full bg-[#0a0a0a] pt-20 md:pt-28 pb-8 overflow-hidden border-t-[6px] border-[#fca311]">
+      <footer className="relative w-full bg-[#0a0a0a] pt-16 md:pt-28 pb-8 overflow-hidden border-t-[6px] border-[#fca311]">
         <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-[#fca311]/15 to-transparent blur-3xl pointer-events-none rounded-full transform -translate-y-1/2"></div>
         <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-[#f8981d]/10 to-transparent blur-3xl pointer-events-none rounded-full transform translate-x-1/3 translate-y-1/3"></div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-12 md:gap-8 text-white mb-20">
+        <div className="relative z-10 max-w-7xl mx-auto px-6 w-full flex flex-col md:grid md:grid-cols-6 gap-12 md:gap-8 text-white mb-12 md:mb-20">
+
           <div className="md:col-span-2 flex flex-col gap-6">
             <div className="flex flex-col font-sans leading-none cursor-pointer">
               <div className="flex items-center gap-3">
@@ -539,44 +610,47 @@ export default function Home() {
             </p>
           </div>
 
-          <div className="flex flex-col gap-6">
-            <h4 className="font-bold text-white tracking-wide">Pages</h4>
-            <ul className="flex flex-col gap-3 text-sm text-white/50 font-medium">
-              <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Home</a></li>
-              <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Schedule</a></li>
-              <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Registration</a></li>
-              <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Venue</a></li>
-              <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Certificates</a></li>
-            </ul>
-          </div>
-          
-          <div className="flex flex-col gap-6">
-            <h4 className="font-bold text-white tracking-wide">Socials</h4>
-            <ul className="flex flex-col gap-3 text-sm text-white/50 font-medium">
-              <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">LinkedIn</a></li>
-              <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Twitter (X)</a></li>
-              <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Instagram</a></li>
-              <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Facebook</a></li>
-            </ul>
+          <div className="md:col-span-4 grid grid-cols-2 sm:grid-cols-4 gap-8 md:gap-8">
+            <div className="flex flex-col gap-4 md:gap-6">
+              <h4 className="font-bold text-white tracking-wide">Pages</h4>
+              <ul className="flex flex-col gap-3 text-sm text-white/50 font-medium">
+                <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Home</a></li>
+                <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Schedule</a></li>
+                <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Registration</a></li>
+                <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Venue</a></li>
+                <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Certificates</a></li>
+              </ul>
+            </div>
+
+            <div className="flex flex-col gap-4 md:gap-6">
+              <h4 className="font-bold text-white tracking-wide">Socials</h4>
+              <ul className="flex flex-col gap-3 text-sm text-white/50 font-medium">
+                <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">LinkedIn</a></li>
+                <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Twitter (X)</a></li>
+                <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Instagram</a></li>
+                <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Facebook</a></li>
+              </ul>
+            </div>
+
+            <div className="flex flex-col gap-4 md:gap-6">
+              <h4 className="font-bold text-white tracking-wide">Legal</h4>
+              <ul className="flex flex-col gap-3 text-sm text-white/50 font-medium">
+                <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Privacy Policy</a></li>
+                <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Terms of Service</a></li>
+                <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Cookie Policy</a></li>
+              </ul>
+            </div>
+
+            <div className="flex flex-col gap-4 md:gap-6">
+              <h4 className="font-bold text-white tracking-wide">Contact</h4>
+              <ul className="flex flex-col gap-3 text-sm text-white/50 font-medium">
+                <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Contact Us</a></li>
+                <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Sponsor Us</a></li>
+                <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Call for Speakers</a></li>
+              </ul>
+            </div>
           </div>
 
-          <div className="flex flex-col gap-6">
-            <h4 className="font-bold text-white tracking-wide">Legal</h4>
-            <ul className="flex flex-col gap-3 text-sm text-white/50 font-medium">
-              <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Terms of Service</a></li>
-              <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Cookie Policy</a></li>
-            </ul>
-          </div>
-
-          <div className="flex flex-col gap-6">
-            <h4 className="font-bold text-white tracking-wide">Contact</h4>
-            <ul className="flex flex-col gap-3 text-sm text-white/50 font-medium">
-              <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Contact Us</a></li>
-              <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Sponsor Us</a></li>
-              <li><a href="#" className="hover:text-[#fca311] hover:translate-x-1 transition-all duration-300 inline-block">Call for Speakers</a></li>
-            </ul>
-          </div>
         </div>
 
         <div className="relative w-full overflow-hidden flex justify-center items-end pointer-events-none select-none px-4">
