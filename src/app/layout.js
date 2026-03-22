@@ -1,18 +1,22 @@
 // src/app/layout.js
-import { Inter, Montserrat } from "next/font/google"; // Import the fonts
+import { Inter, Montserrat, Bebas_Neue } from "next/font/google";
 import "./globals.css";
 
-// 1. Define Inter for body/nav text
 const inter = Inter({
   subsets: ["latin"],
-  variable: '--font-inter', // Create a CSS variable
+  variable: '--font-inter',
 });
 
-// 2. Define Montserrat for headings
 const montserrat = Montserrat({
   subsets: ["latin"],
-  weight: ['700'], // We only need the bold weight for headings
-  variable: '--font-montserrat', // Create a CSS variable
+  weight: ['700'],
+  variable: '--font-montserrat',
+});
+
+const bebasNeue = Bebas_Neue({
+  subsets: ["latin"],
+  weight: ['400'],
+  variable: '--font-bebas',
 });
 
 export const metadata = {
@@ -23,8 +27,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      {/* 3. Apply the variables to the body tag */}
-      <body className={`${inter.variable} ${montserrat.variable} antialiased`}>
+      <body className={`${inter.variable} ${montserrat.variable} ${bebasNeue.variable} antialiased`}>
         {children}
       </body>
     </html>
