@@ -81,31 +81,31 @@ export default function Home() {
   const carouselScrollLeft = useRef(0);
 
   // Past Events accordion state
-  const [activeEvent, setActiveEvent] = useState('mini');
+  const [activeEvent, setActiveEvent] = useState('mini1');
   const [scrollProgress, setScrollProgress] = useState(0);
 
   const eventData = {
-    mini: {
-      label: 'MINI SESSIONS',
-      description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis.',
-      image: '/past-events-thumb.png',
-      pill: 'MINI SESSION',
-    },
     sit2025: {
       label: 'SIT 2025',
-      description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis.',
-      image: '/moment-1.png',
+      description: 'SAP Inside Track Kolkata 2025 — 2nd August 2025, St. Xavier\'s University, Newtown.',
+      image: '/past_events/SAP INSIDE TRACK KOLKATA 2025.JPG',
       pill: 'SIT 2025',
     },
-    sit2024: {
-      label: 'SIT 2024',
-      description: 'Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis.',
-      image: '/moment-2.png',
-      pill: 'SIT 2024',
+    mini1: {
+      label: 'MINI SESSION 01',
+      description: 'SAP Mini Session 01 — 15th January 2026, Sister Nivedita University.',
+      image: '/past_events/SAP MINI SESSION 01.JPG',
+      pill: 'MINI SESSION 01',
+    },
+    mini2: {
+      label: 'MINI SESSION 02',
+      description: 'SAP Mini Session 02 — 21st February 2026, IEM Salt Lake (Godrej Genesis Building).',
+      image: '/past_events/SAP MINI SESSION 02.JPG',
+      pill: 'MINI SESSION 02',
     },
   };
 
-  const allTabs = ['mini', 'sit2025', 'sit2024'];
+  const allTabs = ['mini1', 'mini2', 'sit2025'];
   const navLinks = [
     { label: 'HOME',     href: '#home' },
     { label: 'ABOUT',    href: '#about' },
@@ -115,31 +115,64 @@ export default function Home() {
     { label: 'FAQ',      href: '#faq' },
   ];
 
-  // Dummy data for Speakers Carousel
+  // Past Speakers data
   const speakersData = [
-    { id: 1, name: "NAME", designation: "Designation", image: "/speaker-1.png" },
-    { id: 2, name: "NAME", designation: "Designation", image: "/speaker-2.png" },
-    { id: 3, name: "NAME", designation: "Designation", image: "/speaker-3.jpg" },
-    { id: 4, name: "NAME", designation: "Designation", image: "/speaker-1.png" },
-    { id: 5, name: "NAME", designation: "Designation", image: "/speaker-2.png" },
+    { id: 1,  name: "Koushik Goon",           designation: "SAP Architect (BTP, Integration, Clean Core)",                image: "/past_speakers/Kousik Goon - Chandika Sarkar.png" },
+    { id: 2,  name: "Abhishek Chatterjee",     designation: "Software Specialist, Evora IT Solution",                     image: "/past_speakers/Abhishek Chatterjee - Chandika Sarkar.png" },
+    { id: 3,  name: "Sangeeta Majumdar",       designation: "SAP Architect – Supply Chain, Warehousing & AI Innovation",  image: "/past_speakers/Sangeeta Majumder - Chandika Sarkar.png" },
+    { id: 4,  name: "Ritesh Agrawal",          designation: "Founder & CEO @ Ritzity, SAP Strategy Consulting",          image: "/past_speakers/Ritesh Agrawal - Chandika Sarkar.png" },
+    { id: 5,  name: "Aditi Chatterjee",        designation: "Sr. Managing Consultant & Application Architect",            image: "/past_speakers/aditi Chatterjee - Chandika Sarkar.png" },
+    { id: 6,  name: "Avijit Dhar",             designation: "Application Architect (SAP BTP, Gen AI, Integration)",       image: "/past_speakers/AVIJIT DHAR - Chandika Sarkar.png" },
+    { id: 7,  name: "Rohan Ghosh",             designation: "Associate Manager, Accenture",                               image: "/past_speakers/Rohan Ghosh - Chandika Sarkar.png" },
+    { id: 8,  name: "Biswajit Sarkar",         designation: "Senior Technology Architect, Mactores",                      image: "/past_speakers/Biswajit Sarkar - Chandika Sarkar.png" },
+    { id: 9,  name: "Pankaj Lal",              designation: "SAP TMS & YL (PMP), Westernacher Consulting",               image: "/past_speakers/Pankaj Lal - Chandika Sarkar.png" },
+    { id: 10, name: "Jayabharathy Jothiprakasam", designation: "SAP IBP Practice Director, India",                        image: "/past_speakers/Jayabharathy Jothiprakasam - Chandika Sarkar.png" },
+    { id: 11, name: "Partho Goswami",          designation: "CTO & Founder, NexGenCompany.ai",                           image: "/past_speakers/Partha Goswami - Chandika Sarkar.png" },
+    { id: 12, name: "Sumanta Basu",            designation: "Senior Technical Architect, SAP Integration & ABAP",        image: "/past_speakers/Sumanta Basu - Chandika Sarkar.png" },
+    { id: 13, name: "Sunil Chopra",            designation: "Director, SAP ALM RGTM Global",                             image: "/past_speakers/Sunil Chopra - Pritam Paul.jpeg" },
+    { id: 14, name: "Arghadip Kar",            designation: "SAP S/4HANA ABAP Workflow & VIM Consultant",                image: "/past_speakers/arghadip kar - Chandika Sarkar.png" },
+    { id: 15, name: "Arit Basu",               designation: "Principal Consultant, SAP Business Network for Supply Chain",image: "/past_speakers/Arit Basu - Chandika Sarkar.png" },
+    { id: 16, name: "Prasun Dutta",            designation: "Partner Executive, SAP Practice Leader",                    image: "/past_speakers/Prasun Dutta - Chandika Sarkar.png" },
+    { id: 17, name: "Srini Gottimukkula",      designation: "VP Data & Analytics, Business Cloud Product Management",    image: "/past_speakers/Srini - Chandika Sarkar.png" },
+    { id: 18, name: "Avik Poddar",             designation: "SAP Certified Developer & EWM with S/4HANA",               image: "/past_speakers/Avik Poddar - Chandika Sarkar.png" },
+    { id: 19, name: "Sharmistha Sanyal",       designation: "Solution Architect, Pre-Sales Lead APAC",                   image: "/past_speakers/Sharmistha - Chandika Sarkar.png" },
+    { id: 20, name: "Debashis Majumder",       designation: "Sr. Director Demand Generation, Customer Solution Manager", image: "/past_speakers/Debashish - Chandika Sarkar.png" },
+    { id: 21, name: "Indranil Mitra",          designation: "Partner @ PwC",                                             image: "/past_speakers/Indranil Mitra - Pritam Paul.png" },
+    { id: 22, name: "Tilak Kumar Dhar",        designation: "Leads Databricks PS Global Delivery Center, India",         image: "/past_speakers/tilak - Chandika Sarkar.png" },
+    { id: 23, name: "Pritam Paul",             designation: "Senior Resident Solution Architect @ Databricks",           image: "/past_speakers/pritam - Chandika Sarkar.png" },
+    { id: 24, name: "Mohd Afsar Imam",         designation: "Sr. Solutions Consultant",                                  image: "/past_speakers/mohd - Chandika Sarkar.png" },
+    { id: 25, name: "Dipanwita Dutta",         designation: "Founder @ INSEARCH",                                        image: "/past_speakers/dipannita - Chandika Sarkar.png" },
+    { id: 26, name: "Monimoy Kundu",           designation: "Engagement Partner @ TCS",                                  image: "/past_speakers/monimoy - Chandika Sarkar.png" },
+    { id: 27, name: "Amitava Nag",             designation: "Deep Account Manager, Amazon Web Services India",           image: "/past_speakers/amitava - Chandika Sarkar.png" },
+    { id: 28, name: "Vishwa Vivek Anand",      designation: "Global Head, SAP Analytics CoE at TCS",                    image: "/past_speakers/viswa - Chandika Sarkar.png" },
+    { id: 29, name: "Manoj Mishra",            designation: "Head SAP & Applications, Century Plyboards India",         image: "/past_speakers/manoj - Chandika Sarkar.png" },
+    { id: 30, name: "Prof. Amlan Chakrabarti", designation: "Professor & Director, A.K. Choudhury School of IT, CU",    image: "/past_speakers/Amlan - Diya Dasgupta.png" },
+    { id: 31, name: "Dr. Saptarsi Goswami",   designation: "Asst. Prof Comp Sc, AI Researcher",                        image: "/past_speakers/saptarsi goswami - Diya Dasgupta.png" },
+    { id: 32, name: "Sabyasachi Biswas",       designation: "Chief Executive Officer @ VIKI.AI",                        image: "/past_speakers/sabyasachi biswas - Diya Dasgupta.png" },
   ];
   // Duplicating for the infinite seamless loop effect
-  const infiniteSpeakers = [...speakersData, ...speakersData, ...speakersData, ...speakersData];
+  const infiniteSpeakers = [...speakersData, ...speakersData];
 
   const sponsorsList = [
-    { name: "IBM", logo: "/IBM_logo.png" },
-    { name: "SAP", logo: "/SAP.png" },
-    { name: "Google", logo: "/google.png" },
-    { name: "Microsoft", logo: "/microsoft.jpg" },
-    { name: "Meta", logo: "/Meta-Logo.png" },
+    { name: "WESTERNACHER CONSULTING", logo: "/past_sponsers/westernacher-removebg-preview.png" },
+    { name: "SAP PRESS", logo: "/past_sponsers/sap_press-removebg-preview.png" },
+    { name: "LINC LIMITED", logo: "/past_sponsers/linc-removebg-preview.png" },
   ];
 
   const partnersList = [
-    { name: "TCS", logo: "/tcs.png" },
-    { name: "Oracle", logo: "/Oracle-Logo.png" },
-    { name: "Samsung", logo: "/samsung.png" },
-    { name: "Coca-Cola", logo: "/Coca-Cola-logo.png" },
-    { name: "SAP", logo: "/sap-logo.png" },
+    { name: "Apex Circle", logo: "/community_partners/Apex Circle logo (1) - Yuvraj Prasad.jpg" },
+    { name: "InnovateX", logo: "/community_partners/black logo innovatex (1) - InnovateX.jpg" },
+    { name: "GDG On Campus", logo: "/community_partners/Copy of GDG On Campus - Horizontal - Template - KAUSTUBH PAUL.png" },
+    { name: "Digital Dominators", logo: "/community_partners/Digital Dominators- logo 2 - DIGITAL DOMINATORS.png" },
+    { name: "EDC", logo: "/community_partners/final edc logo - Dipu Shaw.png" },
+    { name: "Group", logo: "/community_partners/Group 1000006169 - Chandika Sarkar.png" },
+    { name: "HITian Inside", logo: "/community_partners/HITian Inside LOGO-01 - Alipto Choudhury.jpeg" },
+    { name: "LNC Community", logo: "/community_partners/LNC Community with gradient name below - Snihita Nandi.png" },
+    { name: "Imperio Coders", logo: "/community_partners/logo - Imperio Coders Official.png" },
+    { name: "Anonymous Legion", logo: "/community_partners/logo_TAL - Anonymous Legion.png" },
+    { name: "Postman Kolkata", logo: "/community_partners/Postman_Kolkata - Suman Singha.png" },
+    { name: "Samarth", logo: "/community_partners/samarth logo violet-1 - Anirban Bandyopadhyay.png" },
+    { name: "Repository", logo: "/community_partners/White BG Logo - Repository.png" },
   ];
 
   useEffect(() => {
@@ -403,6 +436,7 @@ export default function Home() {
   // Mouse & Touch events for manual dragging of the carousel
   const handleCarouselMouseDown = (e) => {
     isCarouselDragging.current = true;
+    isCarouselHovered.current = true;
     carouselStartX.current = e.pageX - speakersScrollRef.current.offsetLeft;
     carouselScrollLeft.current = speakersScrollRef.current.scrollLeft;
   };
@@ -411,12 +445,13 @@ export default function Home() {
     if (!isCarouselDragging.current) return;
     e.preventDefault();
     const x = e.pageX - speakersScrollRef.current.offsetLeft;
-    const walk = (x - carouselStartX.current) * 2;
+    const walk = (x - carouselStartX.current) * 1.5;
     speakersScrollRef.current.scrollLeft = carouselScrollLeft.current - walk;
   };
 
   const handleCarouselMouseUpOrLeave = () => {
     isCarouselDragging.current = false;
+    isCarouselHovered.current = false;
   };
 
   const handleCarouselTouchStart = (e) => {
@@ -428,8 +463,8 @@ export default function Home() {
   const handleCarouselTouchMove = (e) => {
     if (!isCarouselDragging.current) return;
     const x = e.touches[0].pageX - speakersScrollRef.current.offsetLeft;
-    const walk = (x - carouselStartX.current) * 2;
-    speakersCarouselRef.current.scrollLeft = carouselScrollLeft.current - walk;
+    const walk = (x - carouselStartX.current) * 1.5;
+    speakersScrollRef.current.scrollLeft = carouselScrollLeft.current - walk;
   };
 
   return (
@@ -565,8 +600,8 @@ export default function Home() {
           </div>
 
           {(() => {
-            const p1Words = `Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. This is a new world, we are born to rule and conquer the entire world with domination. Lets show the nation what true independence means.`.split(" ");
-            const p2Words = `Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Keep following us in the same way u did and let us grow together and make a family united and unbreakable`.split(" ");
+            const p1Words = `SAP Inside Track Kolkata is a community-driven event that brings together SAP professionals, developers, students, and technology enthusiasts to share knowledge and real-world experiences from the SAP ecosystem. As part of the global SAP Inside Track initiative, the event focuses on open knowledge sharing, peer-to-peer learning, and meaningful discussions.`.split(" ");
+            const p2Words = `Attendees gain practical insights from industry experts, explore real-world SAP use cases, and connect with professionals working across the SAP landscape. The event provides a collaborative platform to learn, network, and grow within the global SAP community.`.split(" ");
             return (
               <>
                 {/* Desktop: absolute positioned top-right. Mobile: stacked flow */}
@@ -607,7 +642,7 @@ export default function Home() {
           <video src="/past-events-video.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover" />
         </div>
 
-        <div ref={peContentRef} className="absolute inset-0 z-10 w-full h-full flex items-start md:items-center opacity-0 invisible px-[6%] md:px-[8%] pt-6 md:pt-0">
+        <div ref={peContentRef} className="absolute inset-0 z-10 w-full h-full flex items-start md:items-center opacity-0 invisible px-[6%] md:px-[8%] pt-[20%] md:pt-0">
 
           <div className="w-full flex flex-col lg:flex-row gap-4 lg:gap-16 items-start lg:items-center">
             <div ref={peLeftColRef} className="w-full lg:w-1/2 flex flex-col">
@@ -619,7 +654,7 @@ export default function Home() {
               </div>
 
               <p className="font-[family-name:var(--font-inter)] text-white/80 text-xs md:text-base lg:text-lg leading-relaxed mb-3 md:mb-8 max-w-lg">
-                Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis.
+                A journey of innovation, connection, and learning — explore our past SAP Inside Track events and mini sessions held across Kolkata.
               </p>
 
               <div className="flex flex-col">
@@ -723,11 +758,11 @@ export default function Home() {
             {infiniteSpeakers.map((speaker, idx) => (
               <div
                 key={idx}
-                className="relative w-[210px] md:w-[230px] lg:w-[260px] shrink-0 select-none rounded-xl md:rounded-2xl overflow-hidden border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)] group"
+                className="relative w-[240px] md:w-[270px] lg:w-[300px] shrink-0 select-none rounded-xl md:rounded-2xl overflow-hidden border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)] group"
                 style={{ background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(16px)' }}
               >
-                {/* Image — square crop, full width */}
-                <div className="w-full aspect-square overflow-hidden relative">
+                {/* Image — fixed height */}
+                <div className="w-full h-[210px] md:h-[240px] overflow-hidden relative shrink-0">
                   <img
                     src={speaker.image}
                     alt={speaker.name}
@@ -739,13 +774,13 @@ export default function Home() {
 
                 {/* Glassmorphic info bar */}
                 <div
-                  className="w-full px-4 py-3 flex flex-col gap-0.5 border-t border-white/10"
+                  className="w-full h-[84px] flex flex-col justify-center gap-0.5 px-4 py-2 border-t border-white/10 overflow-hidden shrink-0"
                   style={{ background: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(20px)' }}
                 >
                   <h3 className="font-[family-name:var(--font-inter)] font-bold text-white text-sm md:text-base tracking-wide leading-tight truncate">
                     {speaker.name}
                   </h3>
-                  <p className="font-[family-name:var(--font-inter)] text-white/50 text-xs md:text-sm font-normal truncate">
+                  <p className="font-[family-name:var(--font-inter)] text-white/50 text-xs md:text-sm font-normal leading-tight">
                     {speaker.designation}
                   </p>
                 </div>
@@ -771,7 +806,7 @@ export default function Home() {
             >
               {[...sponsorsList, ...sponsorsList, ...sponsorsList, ...sponsorsList].map((sponsor, idx) => (
                 <div key={idx} className="flex items-center justify-center w-[220px] md:w-[300px] shrink-0">
-                  <img src={sponsor.logo} alt={sponsor.name} className="h-10 md:h-14 object-contain opacity-60 hover:opacity-100 transition-opacity duration-300"
+                  <img src={sponsor.logo} alt={sponsor.name} className="h-20 md:h-30 object-contain" style={{ mixBlendMode: 'screen' }}
                     onError={e => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }}
                   />
                   <span className="hidden text-white/60 font-bebas text-4xl tracking-widest">{sponsor.name}</span>
@@ -785,13 +820,13 @@ export default function Home() {
         <div className="w-full flex flex-col items-center gap-6 md:gap-10">
           <h2 ref={partnersHeadingRef} className="font-koyoto text-white text-[9vw] md:text-5xl lg:text-[64px] tracking-widest uppercase text-center opacity-0">COMMUNITY PARTNERS</h2>
           <div ref={partnersStripRef} className="relative w-full bg-zinc-900/40 backdrop-blur-md border-y border-white/5 py-8 md:py-10 overflow-hidden opacity-0">
-            <div className="flex w-max items-center" style={{ animation: 'scroll-left 35s linear infinite' }}
+            <div className="flex w-max items-center" style={{ animation: 'scroll-left 90s linear infinite' }}
               onMouseEnter={e => e.currentTarget.style.animationPlayState = 'paused'}
               onMouseLeave={e => e.currentTarget.style.animationPlayState = 'running'}
             >
               {[...partnersList, ...partnersList, ...partnersList, ...partnersList].map((partner, idx) => (
                 <div key={idx} className="flex items-center justify-center w-[220px] md:w-[300px] shrink-0">
-                  <img src={partner.logo} alt={partner.name} className="h-10 md:h-14 object-contain opacity-60 hover:opacity-100 transition-opacity duration-300"
+                  <img src={partner.logo} alt={partner.name} className="h-10 md:h-14 object-contain"
                     onError={e => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }}
                   />
                   <span className="hidden text-white/60 font-bebas text-4xl tracking-widest">{partner.name}</span>
@@ -821,12 +856,15 @@ export default function Home() {
 
           {/* FAQ Items */}
           {[
-            { q: "What is SAP Inside Track Kolkata?", a: "SAP Inside Track Kolkata is a community-driven event organized by SAP enthusiasts for SAP professionals, developers, consultants, and students to connect, learn, and share knowledge." },
-            { q: "Who can attend the event?", a: "Anyone interested in SAP technologies — from beginners to experienced professionals. The event is open to all SAP community members, students, and tech enthusiasts." },
-            { q: "Is the event free to attend?", a: "Yes, SAP Inside Track events are free to attend. Registration is required to secure your spot as seats are limited." },
-            { q: "How can I become a speaker?", a: "We welcome community speakers! Submit your session proposal through the Call for Speakers link. Sessions can be technical deep-dives, case studies, or experience sharing." },
-            { q: "How can my company become a sponsor?", a: "We offer various sponsorship tiers with different benefits. Reach out to us via the Sponsor Us link and our team will get back to you with the sponsorship deck." },
-            { q: "Where will the event be held?", a: "The venue details will be announced closer to the event date. Follow our social media channels for the latest updates." },
+            { q: "What is SAP Inside Track Kolkata?", a: "SAP Inside Track Kolkata is a community-driven event where SAP professionals, experts, and enthusiasts come together to share knowledge, insights, and real-world experiences around SAP technologies." },
+            { q: "Who should attend this event?", a: "This event is ideal for students, developers, SAP professionals, and anyone interested in learning about SAP and enterprise technologies." },
+            { q: "How can I register for the event?", a: "You can register through the official event website using the registration link provided on the homepage. Follow our social media channels to stay updated on upcoming events and announcements." },
+            { q: "Is the event free or paid?", a: "SAP Inside Track events are usually free or have a minimal registration fee. Please check the registration page for exact details." },
+            { q: "What is the date and venue of the event?", a: "The event date, time, and venue details are mentioned on the website and will also be shared in your registration confirmation email." },
+            { q: "What kind of sessions or topics will be covered?", a: "The event will feature expert talks, real-world use cases, technical sessions, and discussions on various SAP technologies and industry trends." },
+            { q: "Who are the speakers at the event?", a: "Speakers are experienced SAP professionals, industry experts, and community leaders who bring practical insights and real-world experience." },
+            { q: "Do I need prior SAP knowledge to attend?", a: "No, prior SAP knowledge is not mandatory. The event is designed for both beginners and experienced attendees." },
+            { q: "How can I contact the organizers for queries?", a: "You can reach out to the organizers through the contact section on the website or via the official email info@sitkolkata.org and social media channels." },
           ].map(({ q, a }, i) => (
             <FAQItem key={i} question={q} answer={a} />
           ))}
