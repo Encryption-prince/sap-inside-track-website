@@ -543,11 +543,13 @@ export default function Home() {
 
         <div ref={textRef} className="absolute top-[30%] md:top-[28%] left-0 w-full h-full z-20 pointer-events-none opacity-0">
           <div className="absolute left-[2%] md:left-[6%]">
-            <h1 className="font-koyoto text-[40vw] md:text-[220px] lg:text-[260px] xl:text-[300px] leading-[0.75] text-white">SAP</h1>
+            <h1 className="font-koyoto text-[40vw] md:text-[220px] lg:text-[260px] xl:text-[300px] leading-[0.75] text-white">
+              S<span className="text-[#FFD200] md:text-white">A</span>P
+            </h1>
           </div>
           <div className="absolute top-[18%] md:top-[5%] left-[30%] md:left-[48%] pr-[4%] md:pr-[10%] flex flex-col items-start">
             <h1 className="font-koyoto text-[11vw] md:text-[85px] lg:text-[100px] xl:text-[118px] leading-[0.85] text-white tracking-wide whitespace-nowrap">
-              INSIDE TRACK
+              INSIDE TR<span className="text-[#FFD200] md:text-white">A</span>CK
             </h1>
             <h2 ref={(el) => (kolkataRefs.current[0] = el)} className="font-koyoto text-[11vw] md:text-[85px] lg:text-[100px] xl:text-[118px] leading-[0.85] text-[#FFD200] tracking-wide mt-1 ml-[33%] md:ml-[33%] opacity-0">
               KOLKATA
