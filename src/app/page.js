@@ -5,6 +5,35 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
+function FAQItem({ question, answer }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div
+      className={`border-t border-white/10 transition-colors duration-300 ${open ? 'border-[#FFD200]/30' : ''}`}
+      onClick={() => setOpen(!open)}
+    >
+      <button className="w-full flex items-center justify-between py-5 md:py-6 text-left gap-4 group cursor-pointer">
+        <span className={`font-[family-name:var(--font-inter)] font-semibold text-base md:text-lg transition-colors duration-300 ${open ? 'text-[#FFD200]' : 'text-white/90 group-hover:text-white'}`}>
+          {question}
+        </span>
+        <span className={`shrink-0 w-7 h-7 rounded-full border flex items-center justify-center transition-all duration-300 ${open ? 'border-[#FFD200] bg-[#FFD200]/10 rotate-45' : 'border-white/20 bg-white/5'}`}>
+          <svg className={`w-3 h-3 transition-colors duration-300 ${open ? 'text-[#FFD200]' : 'text-white/60'}`} fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M12 5v14M5 12h14" />
+          </svg>
+        </span>
+      </button>
+      <div
+        className="overflow-hidden transition-all duration-500 ease-in-out"
+        style={{ maxHeight: open ? '300px' : '0px', opacity: open ? 1 : 0 }}
+      >
+        <p className="font-[family-name:var(--font-inter)] text-white/50 text-sm md:text-base leading-relaxed pb-6 max-w-2xl">
+          {answer}
+        </p>
+      </div>
+    </div>
+  );
+}
+
 export default function Home() {
   // Hero Refs
   const heroSectionRef = useRef(null);
@@ -37,6 +66,15 @@ export default function Home() {
   const speakersHeadingRef = useRef(null);
   const speakersCarouselRef = useRef(null);
   const speakersScrollRef = useRef(null);
+  const sponsorsSectionRef = useRef(null);
+  const sponsorsHeadingRef = useRef(null);
+  const sponsorsStripRef = useRef(null);
+  const partnersHeadingRef = useRef(null);
+  const partnersStripRef = useRef(null);
+  const footerRef = useRef(null);
+  const footerContentRef = useRef(null);
+  const footerWatermarkRef = useRef(null);
+  const cursorRef = useRef(null);
   const isCarouselHovered = useRef(false);
   const isCarouselDragging = useRef(false);
   const carouselStartX = useRef(0);
@@ -44,6 +82,7 @@ export default function Home() {
 
   // Past Events accordion state
   const [activeEvent, setActiveEvent] = useState('mini');
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   const eventData = {
     mini: {
@@ -67,7 +106,14 @@ export default function Home() {
   };
 
   const allTabs = ['mini', 'sit2025', 'sit2024'];
-  const navLinks = ['HOME', 'ABOUT', 'EVENT', 'TEAM', 'FAQ'];
+  const navLinks = [
+    { label: 'HOME',     href: '#home' },
+    { label: 'ABOUT',    href: '#about' },
+    { label: 'EVENTS',   href: '#events' },
+    { label: 'SPEAKERS', href: '#speakers' },
+    { label: 'PARTNERS', href: '#sponsors' },
+    { label: 'FAQ',      href: '#faq' },
+  ];
 
   // Dummy data for Speakers Carousel
   const speakersData = [
@@ -80,6 +126,31 @@ export default function Home() {
   // Duplicating for the infinite seamless loop effect
   const infiniteSpeakers = [...speakersData, ...speakersData, ...speakersData, ...speakersData];
 
+  const sponsorsList = [
+    { name: "IBM", logo: "/IBM_logo.png" },
+    { name: "SAP", logo: "/SAP.png" },
+    { name: "Google", logo: "/google.png" },
+    { name: "Microsoft", logo: "/microsoft.jpg" },
+    { name: "Meta", logo: "/Meta-Logo.png" },
+  ];
+
+  const partnersList = [
+    { name: "TCS", logo: "/tcs.png" },
+    { name: "Oracle", logo: "/Oracle-Logo.png" },
+    { name: "Samsung", logo: "/samsung.png" },
+    { name: "Coca-Cola", logo: "/Coca-Cola-logo.png" },
+    { name: "SAP", logo: "/sap-logo.png" },
+  ];
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      setScrollProgress(total > 0 ? Math.round((window.scrollY / total) * 100) : 0);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   useEffect(() => {
     // Register ScrollTrigger plugin
     gsap.registerPlugin(ScrollTrigger);
@@ -90,11 +161,13 @@ export default function Home() {
     if (chainRef.current) {
       gsap.fromTo(chainRef.current,
         { opacity: 0 },
-        { opacity: 1, duration: 1.8, ease: "power2.out", onComplete: () => {
-          gsap.to(chainRef.current, { y: 12, duration: 3, ease: "sine.inOut", repeat: -1, yoyo: true });
-          gsap.to(chainRef.current, { x: 6, duration: 4, ease: "sine.inOut", repeat: -1, yoyo: true });
-          gsap.to(chainRef.current, { rotation: 0.8, duration: 3.5, ease: "sine.inOut", repeat: -1, yoyo: true });
-        }}
+        {
+          opacity: 1, duration: 1.8, ease: "power2.out", onComplete: () => {
+            gsap.to(chainRef.current, { y: 12, duration: 3, ease: "sine.inOut", repeat: -1, yoyo: true });
+            gsap.to(chainRef.current, { x: 6, duration: 4, ease: "sine.inOut", repeat: -1, yoyo: true });
+            gsap.to(chainRef.current, { rotation: 0.8, duration: 3.5, ease: "sine.inOut", repeat: -1, yoyo: true });
+          }
+        }
       );
     }
 
@@ -177,8 +250,8 @@ export default function Home() {
     tlPastEvents
       .to(peVideoRef.current, { y: "-100vh", scale: 0.95, opacity: 0, duration: 2.5, ease: "power1.inOut" })
       .set(peContentRef.current, { autoAlpha: 1 })
-      .fromTo(peHeadingRef.current,  { y: 40, opacity: 0, filter: "blur(8px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 1.4, ease: "power2.out" }, "<0.1")
-      .fromTo(peLeftColRef.current,  { y: 30, opacity: 0, filter: "blur(6px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 1.4, ease: "power2.out" }, "<0.3")
+      .fromTo(peHeadingRef.current, { y: 40, opacity: 0, filter: "blur(8px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 1.4, ease: "power2.out" }, "<0.1")
+      .fromTo(peLeftColRef.current, { y: 30, opacity: 0, filter: "blur(6px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 1.4, ease: "power2.out" }, "<0.3")
       .fromTo(peRightColRef.current, { y: 30, opacity: 0, filter: "blur(6px)" }, { y: 0, opacity: 1, filter: "blur(0px)", duration: 1.4, ease: "power2.out" }, "<0.2");
 
     // ==========================================
@@ -186,22 +259,84 @@ export default function Home() {
     // ==========================================
     gsap.fromTo(pastHeadingRef.current,
       { x: -200, opacity: 0 },
-      { x: 0, opacity: 1, duration: 1, ease: "power3.out",
+      {
+        x: 0, opacity: 1, duration: 1, ease: "power3.out",
         scrollTrigger: { trigger: speakersSectionRef.current, start: "top 80%", toggleActions: "play none none reset" }
       }
     );
     gsap.fromTo(speakersHeadingRef.current,
       { x: 200, opacity: 0 },
-      { x: 0, opacity: 1, duration: 1, ease: "power3.out",
+      {
+        x: 0, opacity: 1, duration: 1, ease: "power3.out",
         scrollTrigger: { trigger: speakersSectionRef.current, start: "top 80%", toggleActions: "play none none reset" }
       }
     );
     gsap.fromTo(speakersCarouselRef.current,
       { opacity: 0, y: 40 },
-      { opacity: 1, y: 0, duration: 1, ease: "power2.out", delay: 0.4,
+      {
+        opacity: 1, y: 0, duration: 1, ease: "power2.out", delay: 0.4,
         scrollTrigger: { trigger: speakersSectionRef.current, start: "top 80%", toggleActions: "play none none reset" }
       }
     );
+
+    // ==========================================
+    // 5. SPONSORS & PARTNERS ENTRANCE ANIMATION
+    // ==========================================
+    // Sponsors heading fades up
+    gsap.fromTo(sponsorsHeadingRef.current,
+      { opacity: 0, y: 50 },
+      {
+        opacity: 1, y: 0, duration: 1, ease: "power2.out",
+        scrollTrigger: { trigger: sponsorsHeadingRef.current, start: "top 85%", toggleActions: "play none none reset" }
+      }
+    );
+    // Sponsors strip slides in from left
+    gsap.fromTo(sponsorsStripRef.current,
+      { opacity: 0, x: -80 },
+      {
+        opacity: 1, x: 0, duration: 1.2, ease: "power2.out",
+        scrollTrigger: { trigger: sponsorsStripRef.current, start: "top 90%", toggleActions: "play none none reset" }
+      }
+    );
+    // Partners heading fades up
+    gsap.fromTo(partnersHeadingRef.current,
+      { opacity: 0, y: 50 },
+      {
+        opacity: 1, y: 0, duration: 1, ease: "power2.out",
+        scrollTrigger: { trigger: partnersHeadingRef.current, start: "top 85%", toggleActions: "play none none reset" }
+      }
+    );
+    // Partners strip slides in from right
+    gsap.fromTo(partnersStripRef.current,
+      { opacity: 0, x: 80 },
+      {
+        opacity: 1, x: 0, duration: 1.2, ease: "power2.out",
+        scrollTrigger: { trigger: partnersStripRef.current, start: "top 90%", toggleActions: "play none none reset" }
+      }
+    );
+
+    // ==========================================
+    // 6. FOOTER PARALLAX
+    // ==========================================
+    // Content block rises up as you scroll into footer
+    gsap.fromTo(footerContentRef.current,
+      { y: 60, opacity: 0 },
+      {
+        y: 0, opacity: 1, duration: 1.2, ease: "power2.out",
+        scrollTrigger: { trigger: footerRef.current, start: "top 85%", toggleActions: "play none none reset" }
+      }
+    );
+    // Watermark moves at a slower rate than scroll — classic parallax
+    gsap.to(footerWatermarkRef.current, {
+      y: -80,
+      ease: "none",
+      scrollTrigger: {
+        trigger: footerRef.current,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 1.5,
+      }
+    });
 
     return () => {
       ScrollTrigger.getAll().forEach(t => t.kill());
@@ -224,6 +359,45 @@ export default function Home() {
     };
     playCarousel();
     return () => cancelAnimationFrame(animationFrameId);
+  }, []);
+
+  // ==========================================
+  // CUSTOM CURSOR ANIMATION
+  // ==========================================
+  useEffect(() => {
+    if (!cursorRef.current) return;
+
+    const xTo = gsap.quickTo(cursorRef.current, "x", { duration: 0.2, ease: "power3" });
+    const yTo = gsap.quickTo(cursorRef.current, "y", { duration: 0.2, ease: "power3" });
+
+    let hasMoved = false;
+    const handleMouseMove = (e) => {
+      if (!hasMoved) {
+        gsap.to(cursorRef.current, { opacity: 1, scale: 1, duration: 0.3 });
+        hasMoved = true;
+      }
+      xTo(e.clientX - 10);
+      yTo(e.clientY - 10);
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    const interactables = document.querySelectorAll("a, button");
+    const onMouseEnter = () => gsap.to(cursorRef.current, { scale: 3.5, duration: 0.3, ease: "power2.out" });
+    const onMouseLeave = () => gsap.to(cursorRef.current, { scale: 1, duration: 0.3, ease: "power2.out" });
+
+    interactables.forEach((el) => {
+      el.addEventListener("mouseenter", onMouseEnter);
+      el.addEventListener("mouseleave", onMouseLeave);
+    });
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+      interactables.forEach((el) => {
+        el.removeEventListener("mouseenter", onMouseEnter);
+        el.removeEventListener("mouseleave", onMouseLeave);
+      });
+    };
   }, []);
 
   // Mouse & Touch events for manual dragging of the carousel
@@ -259,10 +433,54 @@ export default function Home() {
   };
 
   return (
-    <div className="relative w-full bg-black selection:bg-[#FFD200] selection:text-black">
-      
+    <div className="relative w-full bg-black selection:bg-[#FFD200] selection:text-black md:cursor-none">
+
+      {/* Custom mix-blend-difference cursor */}
+      <div
+        ref={cursorRef}
+        className="fixed top-0 left-0 w-5 h-5 rounded-full bg-white z-[9999] pointer-events-none opacity-0 scale-0 hidden md:block"
+        style={{ mixBlendMode: 'difference' }}
+      />
+
+      {/* Scroll progress indicator — only visible after scrolling starts */}
+      <div className={`fixed bottom-8 right-6 md:right-10 z-[9998] cursor-none transition-all duration-500 ${scrollProgress > 0 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'}`}>
+        <button
+          onClick={() => scrollProgress >= 98 && window.scrollTo({ top: 0, behavior: 'smooth' })}
+          className={`relative w-14 h-14 rounded-full flex items-center justify-center transition-all duration-500 ${scrollProgress >= 98 ? 'cursor-pointer' : 'cursor-none'}`}
+        >
+          {/* SVG circular track */}
+          <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 56 56">
+            {/* Background track */}
+            <circle cx="28" cy="28" r="24" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="2.5" />
+            {/* Progress arc */}
+            <circle
+              cx="28" cy="28" r="24"
+              fill="none"
+              stroke="#FFD200"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeDasharray={`${2 * Math.PI * 24}`}
+              strokeDashoffset={`${2 * Math.PI * 24 * (1 - scrollProgress / 100)}`}
+              className="transition-all duration-150"
+            />
+          </svg>
+
+          {/* Center content */}
+          <div className="relative z-10 flex items-center justify-center w-9 h-9 rounded-full bg-black/60 backdrop-blur-sm border border-white/10">
+            {scrollProgress >= 98 ? (
+              /* Arrow up icon */
+              <svg className="w-4 h-4 text-[#FFD200]" fill="none" stroke="currentColor" strokeWidth={2.5} viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+              </svg>
+            ) : (
+              <span className="font-bebas text-[11px] text-white leading-none tracking-wide">{scrollProgress}%</span>
+            )}
+          </div>
+        </button>
+      </div>
+
       {/* --- HERO SECTION --- */}
-      <section ref={heroSectionRef} className="relative w-full h-screen overflow-hidden">
+      <section id="home" ref={heroSectionRef} className="relative w-full h-screen overflow-hidden">
         <div className="absolute inset-0 z-0">
           <Image src="/hero-background.png" alt="Dark noisy background" fill priority className="object-cover opacity-80" />
         </div>
@@ -271,37 +489,37 @@ export default function Home() {
           <Image src="/sap-logo.png" alt="SAP Inside Track Kolkata" width={160} height={90} className="object-contain" />
         </div>
 
-        <div className="absolute top-4 right-[2%] md:right-[3%] z-30 flex flex-col items-end leading-[1.2]">
+        <div className="absolute top-4 right-[2%] md:right-[3%] z-30 hidden md:flex flex-col items-end leading-[1.2]">
           {navLinks.map((link, i) => (
-            <a key={link} ref={(el) => (navRefs.current[i] = el)} href={`#${link.toLowerCase()}`} className="font-bebas text-xl md:text-[26px] text-white tracking-[0.05em] hover:text-[#FFD200] transition-colors duration-300 relative group opacity-0">
-              {link}
+            <a key={link.label} ref={(el) => (navRefs.current[i] = el)} href={link.href} className="font-bebas text-base md:text-[20px] text-white tracking-[0.05em] hover:text-[#FFD200] transition-colors duration-300 relative group opacity-0">
+              {link.label}
               <span className="absolute bottom-0 left-0 w-0 h-[2px] bg-[#FFD200] transition-all duration-300 group-hover:w-full"></span>
             </a>
           ))}
         </div>
 
-        <div ref={pillRef} className="absolute bottom-16 md:bottom-20 left-[4%] md:left-[6%] z-30 opacity-0">
-          <div className="px-6 md:px-10 py-2 md:py-3 rounded-full border border-white/10 bg-white/10 backdrop-blur-md flex items-center gap-5 md:gap-8 shadow-2xl">
-            <span className="font-bebas text-lg md:text-[22px] text-white tracking-widest mt-1">INNOVATE</span>
-            <span className="font-bebas text-lg md:text-[22px] text-white tracking-widest mt-1">CONNECT</span>
-            <span className="font-bebas text-lg md:text-[22px] text-white tracking-widest mt-1">LEARN</span>
+        <div ref={pillRef} className="absolute bottom-35 md:bottom-20 left-[24%] md:left-[6%] z-30 opacity-0">
+          <div className="px-7 md:px-10 py-2.5 md:py-3 rounded-full border border-white/10 bg-white/10 backdrop-blur-md flex items-center gap-3 md:gap-8 shadow-2xl">
+            <span className="font-bebas text-base md:text-[22px] text-white tracking-widest mt-1">INNOVATE</span>
+            <span className="font-bebas text-base md:text-[22px] text-white tracking-widest mt-1">CONNECT</span>
+            <span className="font-bebas text-base md:text-[22px] text-white tracking-widest mt-1">LEARN</span>
           </div>
         </div>
 
-        <div ref={textRef} className="absolute top-[22%] md:top-[28%] left-0 w-full h-full z-20 pointer-events-none opacity-0">
-          <div className="absolute left-[4%] md:left-[6%]">
-            <h1 className="font-koyoto text-[22vw] md:text-[220px] lg:text-[260px] xl:text-[300px] leading-[0.75] text-white">SAP</h1>
+        <div ref={textRef} className="absolute top-[30%] md:top-[28%] left-0 w-full h-full z-20 pointer-events-none opacity-0">
+          <div className="absolute left-[2%] md:left-[6%]">
+            <h1 className="font-koyoto text-[40vw] md:text-[220px] lg:text-[260px] xl:text-[300px] leading-[0.75] text-white">SAP</h1>
           </div>
-          <div className="absolute top-[10%] md:top-[5%] left-[48%] md:left-[48%] pr-[12%] md:pr-[10%] flex flex-col items-start">
-            <h1 className="font-koyoto text-[8vw] md:text-[85px] lg:text-[100px] xl:text-[118px] leading-[0.85] text-white tracking-wide whitespace-nowrap">
+          <div className="absolute top-[18%] md:top-[5%] left-[30%] md:left-[48%] pr-[4%] md:pr-[10%] flex flex-col items-start">
+            <h1 className="font-koyoto text-[11vw] md:text-[85px] lg:text-[100px] xl:text-[118px] leading-[0.85] text-white tracking-wide whitespace-nowrap">
               INSIDE TRACK
             </h1>
-            <h2 ref={(el) => (kolkataRefs.current[0] = el)} className="font-koyoto text-[8vw] md:text-[85px] lg:text-[100px] xl:text-[118px] leading-[0.85] text-[#FFD200] tracking-wide mt-1 ml-[12%] md:ml-[33%] opacity-0">
+            <h2 ref={(el) => (kolkataRefs.current[0] = el)} className="font-koyoto text-[11vw] md:text-[85px] lg:text-[100px] xl:text-[118px] leading-[0.85] text-[#FFD200] tracking-wide mt-1 ml-[33%] md:ml-[33%] opacity-0">
               KOLKATA
             </h2>
-            <div className="flex flex-col -space-y-2 md:-space-y-0 lg:-space-y-2 mt-[-6px] md:mt-[-16px] ml-[12%] md:ml-[33%]">
+            <div className="flex flex-col -space-y-1 md:-space-y-0 lg:-space-y-2 mt-[-4px] md:mt-[-16px] ml-[33%] md:ml-[33%]">
               {[0.6, 0.30, 0.1, 0.04].map((opacity, i) => (
-                <h2 key={i} ref={(el) => (kolkataRefs.current[i + 1] = el)} className="font-koyoto text-[8vw] md:text-[85px] lg:text-[100px] xl:text-[118px] leading-[0.85] text-outline-yellow tracking-wide opacity-0">
+                <h2 key={i} ref={(el) => (kolkataRefs.current[i + 1] = el)} className="font-koyoto text-[11vw] md:text-[85px] lg:text-[100px] xl:text-[118px] leading-[0.85] text-outline-yellow tracking-wide opacity-0">
                   KOLKATA
                 </h2>
               ))}
@@ -309,21 +527,39 @@ export default function Home() {
           </div>
         </div>
 
+        {/* Mobile hamburger nav */}
+        <div className="absolute top-4 right-[4%] z-30 md:hidden">
+          <details className="group">
+            <summary className="list-none cursor-pointer flex flex-col gap-1.5 p-2">
+              <span className="block w-6 h-0.5 bg-white"></span>
+              <span className="block w-6 h-0.5 bg-white"></span>
+              <span className="block w-4 h-0.5 bg-white"></span>
+            </summary>
+            <div className="absolute right-0 top-10 bg-black/90 backdrop-blur-md rounded-xl border border-white/10 p-4 flex flex-col gap-3 min-w-[140px]">
+              {navLinks.map((link) => (
+                <a key={link.label} href={link.href} className="font-bebas text-lg text-white tracking-widest hover:text-[#FFD200] transition-colors">
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </details>
+        </div>
+
         <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
-          <img ref={chainRef} src="/hero-chain.png" alt="Floating chain" className="h-[95vh] md:h-[105vh] w-auto object-contain max-w-none opacity-0" />
+          <img ref={chainRef} src="/hero-chain.png" alt="Floating chain" className="h-[110vh] md:h-[105vh] w-auto object-contain max-w-none opacity-0" />
         </div>
       </section>
 
       {/* --- ABOUT US SECTION --- */}
-      <section ref={aboutSectionRef} className="relative w-full h-screen bg-white overflow-hidden">
-        
+      <section id="about" ref={aboutSectionRef} className="relative w-full h-screen bg-white overflow-hidden">
+
         <div ref={aboutContentRef} className="absolute inset-0 w-full h-full z-10 opacity-0 invisible text-black overflow-hidden">
 
-          <div className="absolute left-[2%] md:left-[3%] top-[4%] flex flex-row items-start gap-4 md:gap-6 leading-none">
-            <span ref={usRef} className="font-koyoto font-extrabold text-[13vw] md:text-[11vw] lg:text-[10vw] text-[#0d2b5c] leading-[0.85] [writing-mode:vertical-lr]">
+          <div className="absolute left-[1%] md:left-[3%] top-[2%] flex flex-row items-start gap-2 md:gap-6 leading-none">
+            <span ref={usRef} className="font-koyoto font-extrabold text-[12vw] md:text-[11vw] lg:text-[10vw] text-[#0d2b5c] leading-[0.85] [writing-mode:vertical-lr]">
               US
             </span>
-            <span ref={aboutTextRef} className="font-koyoto font-extrabold text-[13vw] md:text-[11vw] lg:text-[10vw] text-[#0d2b5c] leading-[0.85] [writing-mode:vertical-lr] mt-[12%] md:mt-[34%]">
+            <span ref={aboutTextRef} className="font-koyoto font-extrabold text-[12vw] md:text-[11vw] lg:text-[10vw] text-[#0d2b5c] leading-[0.85] [writing-mode:vertical-lr] mt-[8%] md:mt-[34%]">
               ABOUT
             </span>
           </div>
@@ -333,16 +569,18 @@ export default function Home() {
             const p2Words = `Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis. Keep following us in the same way u did and let us grow together and make a family united and unbreakable`.split(" ");
             return (
               <>
-                <div className="absolute top-[10%] left-[24%] md:left-[26%] right-[3%] md:right-[23%] z-10">
-                  <p className="font-[family-name:var(--font-inter)] text-black/80 font-medium text-base md:text-lg lg:text-[1.1rem] leading-relaxed">
+                {/* Desktop: absolute positioned top-right. Mobile: stacked flow */}
+                <div className="md:absolute md:top-[5%] md:left-[26%] md:right-[23%] absolute top-[25%] left-[20%] w-[76%] md:w-auto md:top-[5%] z-10">
+                  <p className="font-[family-name:var(--font-inter)] text-black/80 font-medium text-xs md:text-lg lg:text-[1.1rem] leading-relaxed">
                     {p1Words.map((word, i) => (
                       <span key={`p1-${i}`} ref={(el) => (wordRefs.current[i] = el)} className="inline-block mr-[0.3em] opacity-0">{word}</span>
                     ))}
                   </p>
                 </div>
 
-                <div className="absolute top-[32%] left-[76%] md:left-[76%] right-[3%] md:right-[4%] z-10">
-                  <p className="font-[family-name:var(--font-inter)] text-black/80 font-medium text-sm md:text-base lg:text-[1rem] leading-relaxed">
+                {/* Desktop: absolute right column. Mobile: stacked below p1 */}
+                <div className="md:absolute md:top-[32%] md:left-[76%] md:right-[4%] absolute top-[48%] left-[20%] w-[76%] md:w-auto z-10">
+                  <p className="font-[family-name:var(--font-inter)] text-black/80 font-medium text-xs md:text-base lg:text-[1rem] leading-relaxed">
                     {p2Words.map((word, i) => (
                       <span key={`p2-${i}`} ref={(el) => (wordRefs.current[p1Words.length + i] = el)} className="inline-block mr-[0.3em] opacity-0">{word}</span>
                     ))}
@@ -352,7 +590,7 @@ export default function Home() {
             );
           })()}
 
-          <div ref={victoriaRef} className="absolute bottom-[-2%] left-[28%] md:left-[26%] w-[52%] md:w-[48%] pointer-events-none z-0">
+          <div ref={victoriaRef} className="absolute bottom-[-2%] left-[6%] md:left-[26%] w-[90%] md:w-[48%] pointer-events-none z-0">
             <img src="/victoria.png" alt="Victoria Memorial" className="w-full h-auto mix-blend-multiply opacity-90" />
           </div>
 
@@ -363,24 +601,24 @@ export default function Home() {
       </section>
 
       {/* --- PAST EVENTS SECTION --- */}
-      <section ref={pastEventsSectionRef} className="relative w-full h-screen bg-black text-white overflow-hidden flex items-center justify-center px-6 md:px-16">
-        
+      <section id="events" ref={pastEventsSectionRef} className="relative w-full h-screen bg-black text-white overflow-hidden flex items-center justify-center px-6 md:px-16">
+
         <div ref={peVideoRef} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full aspect-video overflow-hidden z-20">
           <video src="/past-events-video.mp4" autoPlay loop muted playsInline className="w-full h-full object-cover" />
         </div>
 
-        <div ref={peContentRef} className="absolute inset-0 z-10 w-full h-full flex items-center opacity-0 invisible px-[6%] md:px-[8%]">
-          
-          <div className="w-full flex flex-col lg:flex-row gap-10 lg:gap-16 items-start lg:items-center">
+        <div ref={peContentRef} className="absolute inset-0 z-10 w-full h-full flex items-start md:items-center opacity-0 invisible px-[6%] md:px-[8%] pt-6 md:pt-0">
+
+          <div className="w-full flex flex-col lg:flex-row gap-4 lg:gap-16 items-start lg:items-center">
             <div ref={peLeftColRef} className="w-full lg:w-1/2 flex flex-col">
 
-              <div ref={peHeadingRef} className="mb-4 md:mb-6">
-                <h2 className="font-koyoto text-[#FFD200] text-[8vw] md:text-[56px] lg:text-[64px] leading-none tracking-wide">
+              <div ref={peHeadingRef} className="mb-2 md:mb-6">
+                <h2 className="font-koyoto text-[#FFD200] text-[10vw] md:text-[56px] lg:text-[64px] leading-none tracking-wide">
                   PAST EVENTS
                 </h2>
               </div>
 
-              <p className="font-[family-name:var(--font-inter)] text-white/80 text-sm md:text-base lg:text-lg leading-relaxed mb-6 md:mb-8 max-w-lg">
+              <p className="font-[family-name:var(--font-inter)] text-white/80 text-xs md:text-base lg:text-lg leading-relaxed mb-3 md:mb-8 max-w-lg">
                 Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convallis.
               </p>
 
@@ -392,16 +630,16 @@ export default function Home() {
                     <div key={key} className="border-t border-white/10">
                       <button
                         onClick={() => setActiveEvent(key)}
-                        className={`w-full text-left font-bebas tracking-widest py-3 md:py-4 transition-colors duration-300 text-2xl md:text-[32px] ${isActive ? 'text-[#FFD200]' : 'text-[#A68A00] hover:text-[#FFD200]'}`}
+                        className={`w-full text-left font-bebas tracking-widest py-2 md:py-4 transition-colors duration-300 text-xl md:text-[32px] ${isActive ? 'text-[#FFD200]' : 'text-[#A68A00] hover:text-[#FFD200]'}`}
                       >
                         {item.label}
                       </button>
 
                       <div
                         className="overflow-hidden transition-all duration-500 ease-in-out"
-                        style={{ maxHeight: isActive ? '300px' : '0px', opacity: isActive ? 1 : 0 }}
+                        style={{ maxHeight: isActive ? '120px' : '0px', opacity: isActive ? 1 : 0 }}
                       >
-                        <p className="font-[family-name:var(--font-inter)] text-white/70 text-sm md:text-base leading-relaxed pb-4 md:pb-6 max-w-sm">
+                        <p className="font-[family-name:var(--font-inter)] text-white/70 text-xs md:text-base leading-relaxed pb-2 md:pb-6 max-w-sm">
                           {item.description}
                         </p>
                       </div>
@@ -412,8 +650,9 @@ export default function Home() {
 
             </div>
 
-            <div ref={peRightColRef} className="w-full lg:w-1/2 flex justify-center lg:justify-end">
-              <div className="relative w-full max-w-[520px] aspect-[4/3] rounded-[1.5rem] md:rounded-[2rem] overflow-hidden shadow-2xl group">
+            {/* Image — shown on mobile at bottom, on desktop as right column */}
+            <div ref={peRightColRef} className="w-full lg:w-1/2 flex lg:justify-end justify-center">
+              <div className="relative w-full max-w-[340px] lg:max-w-[520px] aspect-[4/3] rounded-[1rem] md:rounded-[2rem] overflow-hidden shadow-2xl group">
                 <img
                   key={activeEvent}
                   src={eventData[activeEvent].image}
@@ -421,8 +660,8 @@ export default function Home() {
                   className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
                   style={{ animation: 'imgFadeIn 0.5s ease' }}
                 />
-                <div className="absolute bottom-5 right-5 md:bottom-6 md:right-6">
-                  <div className="px-5 md:px-7 py-2 rounded-full bg-gradient-to-r from-[#d97706] to-[#eab308] border border-white/30 backdrop-blur-md shadow-xl text-white font-bebas tracking-widest text-base md:text-lg">
+                <div className="absolute bottom-3 right-3 md:bottom-6 md:right-6">
+                  <div className="px-4 md:px-7 py-1.5 md:py-2 rounded-full bg-gradient-to-r from-[#d97706] to-[#eab308] border border-white/30 backdrop-blur-md shadow-xl text-white font-bebas tracking-widest text-sm md:text-lg">
                     {eventData[activeEvent].pill}
                   </div>
                 </div>
@@ -436,8 +675,8 @@ export default function Home() {
       {/* ==========================================
           PAST SPEAKERS SECTION
       ========================================== */}
-      <section ref={speakersSectionRef} className="relative w-full h-screen bg-black overflow-hidden flex items-center justify-center">
-        
+      <section id="speakers" ref={speakersSectionRef} className="relative w-full h-screen bg-black overflow-hidden flex items-center justify-center">
+
         {/* Background Infinite Video */}
         <video
           src="/past-speakers-bg.mp4"
@@ -449,23 +688,22 @@ export default function Home() {
         />
 
         {/* Headings positioned exactly as in the design */}
-        <div ref={pastHeadingRef} className="absolute top-6 left-6 md:top-1 md:left-12 z-10 pointer-events-none" style={{opacity: 0}}>
-          <h2 className="font-koyoto text-white text-[18vw] md:text-[140px] lg:text-[140px] leading-none tracking-wide drop-shadow-2xl">
+        <div ref={pastHeadingRef} className="absolute top-[4%] left-3 md:top-1 md:left-12 z-10 pointer-events-none" style={{ opacity: 0 }}>
+          <h2 className="font-koyoto text-white text-[22vw] md:text-[140px] lg:text-[140px] leading-none tracking-wide drop-shadow-2xl">
             PAST
           </h2>
         </div>
-        <div ref={speakersHeadingRef} className="absolute bottom-6 right-6 md:bottom-1 md:right-12 z-10 pointer-events-none" style={{opacity: 0}}>
-          <h2 className="font-koyoto text-white text-[15vw] md:text-[120px] lg:text-[140px] leading-none tracking-wide drop-shadow-2xl">
+        <div ref={speakersHeadingRef} className="absolute bottom-[30%] right-3 md:bottom-1 md:right-12 z-10 pointer-events-none" style={{ opacity: 0 }}>
+          <h2 className="font-koyoto text-white text-[18vw] md:text-[120px] lg:text-[140px] leading-none tracking-wide drop-shadow-2xl">
             SPEAKERS
           </h2>
         </div>
 
         {/* Circular Glassmorphism Drag & Auto-scroll Carousel */}
-        <div className="relative z-20 w-full h-full flex items-center" ref={speakersCarouselRef} style={{opacity: 0}}>
+        <div className="relative z-20 w-full h-full flex items-start md:items-center pt-[50%] md:pt-0" ref={speakersCarouselRef} style={{ opacity: 0 }}>
           <div
             ref={speakersScrollRef}
-            /* Hide scrollbars natively but allow overflow logic */
-            className="flex gap-8 md:gap-16 overflow-x-auto overflow-y-hidden px-[10vw] cursor-grab active:cursor-grabbing w-full items-center [&::-webkit-scrollbar]:hidden"
+            className="flex gap-4 md:gap-16 overflow-x-auto overflow-y-hidden px-[5vw] md:px-[10vw] cursor-grab active:cursor-grabbing w-full items-center [&::-webkit-scrollbar]:hidden"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             // Event Listeners for Hover to Pause
             onMouseEnter={() => (isCarouselHovered.current = true)}
@@ -485,27 +723,29 @@ export default function Home() {
             {infiniteSpeakers.map((speaker, idx) => (
               <div
                 key={idx}
-                className="relative w-[280px] h-[280px] md:w-[320px] md:h-[320px] lg:w-[360px] lg:h-[400px] rounded-full overflow-hidden shrink-0 select-none border border-white/5 shadow-[0_0_40px_rgba(0,0,0,0.5)] bg-[#1a1a1a]/60 backdrop-blur-sm"
+                className="relative w-[210px] md:w-[230px] lg:w-[260px] shrink-0 select-none rounded-xl md:rounded-2xl overflow-hidden border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)] group"
+                style={{ background: 'rgba(255,255,255,0.04)', backdropFilter: 'blur(16px)' }}
               >
-                {/* Concentric Arch Image Container: 
-                  Geometrically exact math. If width is 84%, pushing it 8% from the top 
-                  and applying rounded-t-full creates a perfect semi-circle that aligns 
-                  flawlessly with the outer border radius!
-                */}
-                <div className="absolute top-[8%] left-[8%] w-[84%] h-[42%] rounded-t-full overflow-hidden pointer-events-none">
+                {/* Image — square crop, full width */}
+                <div className="w-full aspect-square overflow-hidden relative">
                   <img
                     src={speaker.image}
                     alt={speaker.name}
-                    className="w-full h-full object-cover object-center"
+                    className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                   />
+                  {/* Subtle gradient overlay at bottom of image */}
+                  <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
                 </div>
 
-                {/* Text Container - Centered in the bottom 50% of the circle */}
-                <div className="absolute bottom-0 left-0 w-full h-[50%] flex flex-col items-center justify-center text-white pointer-events-none pb-[4%]">
-                  <h3 className="font-[family-name:var(--font-inter)] font-bold text-lg md:text-xl tracking-wide leading-tight">
+                {/* Glassmorphic info bar */}
+                <div
+                  className="w-full px-4 py-3 flex flex-col gap-0.5 border-t border-white/10"
+                  style={{ background: 'rgba(255,255,255,0.06)', backdropFilter: 'blur(20px)' }}
+                >
+                  <h3 className="font-[family-name:var(--font-inter)] font-bold text-white text-sm md:text-base tracking-wide leading-tight truncate">
                     {speaker.name}
                   </h3>
-                  <p className="font-[family-name:var(--font-inter)] text-sm md:text-base text-white/70 font-normal mt-1 md:mt-1.5">
+                  <p className="font-[family-name:var(--font-inter)] text-white/50 text-xs md:text-sm font-normal truncate">
                     {speaker.designation}
                   </p>
                 </div>
@@ -515,6 +755,164 @@ export default function Home() {
         </div>
 
       </section>
+
+      {/* ==========================================
+          SPONSORS & PARTNERS SECTION
+      ========================================== */}
+      <section id="sponsors" ref={sponsorsSectionRef} className="relative w-full py-12 md:py-32 bg-black overflow-hidden flex flex-col items-center justify-center gap-10 md:gap-24">
+
+        {/* PAST SPONSORS */}
+        <div className="w-full flex flex-col items-center gap-6 md:gap-10">
+          <h2 ref={sponsorsHeadingRef} className="font-koyoto text-white text-[10vw] md:text-5xl lg:text-[64px] tracking-widest uppercase text-center opacity-0">PAST SPONSORS</h2>
+          <div ref={sponsorsStripRef} className="relative w-full bg-zinc-900/40 backdrop-blur-md border-y border-white/5 py-8 md:py-10 overflow-hidden opacity-0">
+            <div className="flex w-max items-center" style={{ animation: 'scroll-right 35s linear infinite' }}
+              onMouseEnter={e => e.currentTarget.style.animationPlayState = 'paused'}
+              onMouseLeave={e => e.currentTarget.style.animationPlayState = 'running'}
+            >
+              {[...sponsorsList, ...sponsorsList, ...sponsorsList, ...sponsorsList].map((sponsor, idx) => (
+                <div key={idx} className="flex items-center justify-center w-[220px] md:w-[300px] shrink-0">
+                  <img src={sponsor.logo} alt={sponsor.name} className="h-10 md:h-14 object-contain opacity-60 hover:opacity-100 transition-opacity duration-300"
+                    onError={e => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }}
+                  />
+                  <span className="hidden text-white/60 font-bebas text-4xl tracking-widest">{sponsor.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* COMMUNITY PARTNERS */}
+        <div className="w-full flex flex-col items-center gap-6 md:gap-10">
+          <h2 ref={partnersHeadingRef} className="font-koyoto text-white text-[9vw] md:text-5xl lg:text-[64px] tracking-widest uppercase text-center opacity-0">COMMUNITY PARTNERS</h2>
+          <div ref={partnersStripRef} className="relative w-full bg-zinc-900/40 backdrop-blur-md border-y border-white/5 py-8 md:py-10 overflow-hidden opacity-0">
+            <div className="flex w-max items-center" style={{ animation: 'scroll-left 35s linear infinite' }}
+              onMouseEnter={e => e.currentTarget.style.animationPlayState = 'paused'}
+              onMouseLeave={e => e.currentTarget.style.animationPlayState = 'running'}
+            >
+              {[...partnersList, ...partnersList, ...partnersList, ...partnersList].map((partner, idx) => (
+                <div key={idx} className="flex items-center justify-center w-[220px] md:w-[300px] shrink-0">
+                  <img src={partner.logo} alt={partner.name} className="h-10 md:h-14 object-contain opacity-60 hover:opacity-100 transition-opacity duration-300"
+                    onError={e => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'block'; }}
+                  />
+                  <span className="hidden text-white/60 font-bebas text-4xl tracking-widest">{partner.name}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      {/* ==========================================
+          FAQ SECTION
+      ========================================== */}
+      <section id="faq" className="relative w-full bg-black py-20 md:py-32 px-6 md:px-[8%] overflow-hidden">
+
+        {/* Subtle glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-[#FFD200]/5 to-transparent blur-3xl pointer-events-none rounded-full"></div>
+
+        <div className="relative z-10 max-w-4xl mx-auto">
+
+          {/* Heading */}
+          <div className="mb-12 md:mb-16">
+            <h2 className="font-koyoto text-white text-[12vw] md:text-[80px] lg:text-[96px] leading-none tracking-wide">FAQ</h2>
+            <div className="w-12 h-[3px] bg-[#FFD200] mt-4 rounded-full"></div>
+          </div>
+
+          {/* FAQ Items */}
+          {[
+            { q: "What is SAP Inside Track Kolkata?", a: "SAP Inside Track Kolkata is a community-driven event organized by SAP enthusiasts for SAP professionals, developers, consultants, and students to connect, learn, and share knowledge." },
+            { q: "Who can attend the event?", a: "Anyone interested in SAP technologies — from beginners to experienced professionals. The event is open to all SAP community members, students, and tech enthusiasts." },
+            { q: "Is the event free to attend?", a: "Yes, SAP Inside Track events are free to attend. Registration is required to secure your spot as seats are limited." },
+            { q: "How can I become a speaker?", a: "We welcome community speakers! Submit your session proposal through the Call for Speakers link. Sessions can be technical deep-dives, case studies, or experience sharing." },
+            { q: "How can my company become a sponsor?", a: "We offer various sponsorship tiers with different benefits. Reach out to us via the Sponsor Us link and our team will get back to you with the sponsorship deck." },
+            { q: "Where will the event be held?", a: "The venue details will be announced closer to the event date. Follow our social media channels for the latest updates." },
+          ].map(({ q, a }, i) => (
+            <FAQItem key={i} question={q} answer={a} />
+          ))}
+
+        </div>
+      </section>
+
+      {/* ==========================================
+          FOOTER
+      ========================================== */}
+      <footer id="contact" ref={footerRef} className="relative w-full bg-[#0a0a0a] pt-16 md:pt-24 pb-8 overflow-hidden border-t-[4px] border-[#FFD200]">
+
+        {/* Glow blobs */}
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-[#FFD200]/15 to-transparent blur-3xl pointer-events-none rounded-full -translate-y-1/2"></div>
+        <div className="absolute bottom-0 right-0 w-[500px] h-[500px] bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-[#FFD200]/10 to-transparent blur-3xl pointer-events-none rounded-full translate-x-1/3 translate-y-1/3"></div>
+
+        <div ref={footerContentRef} className="relative z-10 max-w-6xl mx-auto px-6 w-full text-white mb-12 md:mb-16 opacity-0">
+
+          {/* Mobile: logo top-center. Desktop: hidden (logo is in the middle of the row) */}
+          <div className="flex justify-center mb-6 md:hidden">
+            <Image src="/sap-logo.png" alt="SAP Inside Track Kolkata" width={140} height={80} className="object-contain" />
+          </div>
+
+          {/* Mobile: contact left + socials right. Desktop: contact | logo | socials */}
+          <div className="flex flex-row justify-between md:flex-row md:items-start md:justify-between gap-6 md:gap-12">
+
+            {/* Contact */}
+            <div className="flex flex-col gap-3 md:gap-4">
+              <h4 className="font-bebas text-[#FFD200] tracking-[0.2em] text-lg">CONTACT</h4>
+              <ul className="flex flex-col gap-2 md:gap-3">
+                {[
+                  { label: 'contact@sapinsidetrack.in', icon: 'M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z M22 6l-10 7L2 6' },
+                  { label: 'Sponsor Us', icon: 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z' },
+                  { label: 'Call for Speakers', icon: 'M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2 M23 21v-2a4 4 0 00-3-3.87 M16 3.13a4 4 0 010 7.75 M9 7a4 4 0 100 8 4 4 0 000-8z' },
+                ].map(({ label, icon }) => (
+                  <li key={label} className="list-none">
+                    <a href="#" className="flex items-center gap-2 text-xs md:text-sm text-white/50 hover:text-[#FFD200] transition-colors duration-300">
+                      <svg className="w-3 h-3 md:w-4 md:h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d={icon} />
+                      </svg>
+                      <span className="truncate max-w-[120px] md:max-w-none">{label}</span>
+                    </a>
+                  </li>
+                ))}
+              </ul>
+              <p className="text-white/30 text-[10px] md:text-xs mt-2 md:mt-4">© 2026 SAP Inside Track Kolkata.<br />All rights reserved.</p>
+            </div>
+
+            {/* Logo — center, desktop only */}
+            <div className="hidden md:flex flex-col items-center gap-3 mx-auto mt-6 md:mt-12">
+              <Image src="/sap-logo.png" alt="SAP Inside Track Kolkata" width={160} height={90} className="object-contain md:w-[220px] md:h-[124px]" />
+            </div>
+
+            {/* Socials */}
+            <div className="flex flex-col gap-3 md:gap-4">
+              <h4 className="font-bebas text-[#FFD200] tracking-[0.2em] text-lg">SOCIALS</h4>
+              <ul className="flex flex-col gap-2 md:gap-3">
+                {[
+                  { label: 'LinkedIn', icon: 'M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z M4 6a2 2 0 100-4 2 2 0 000 4z' },
+                  { label: 'Twitter (X)', icon: 'M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z' },
+                  { label: 'Instagram', icon: 'M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zM17.5 6.5h.01M7.5 2h9A5.5 5.5 0 0122 7.5v9a5.5 5.5 0 01-5.5 5.5h-9A5.5 5.5 0 012 16.5v-9A5.5 5.5 0 017.5 2z' },
+                  { label: 'Facebook', icon: 'M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z' },
+                ].map(({ label, icon }) => (
+                  <li key={label} className="list-none">
+                    <a href="#" className="flex items-center gap-2 text-xs md:text-sm text-white/50 hover:text-[#FFD200] transition-colors duration-300">
+                      <svg className="w-3 h-3 md:w-4 md:h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" d={icon} />
+                      </svg>
+                      {label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+          </div>
+        </div>
+
+        {/* Big KOLKATA watermark */}
+        <div ref={footerWatermarkRef} className="relative w-full overflow-hidden flex justify-center items-end pointer-events-none select-none">
+          <h1 className="font-koyoto text-[12vw] md:text-[15vw] text-transparent bg-clip-text bg-gradient-to-b from-[#FFD200]/10 to-[#FFD200]/0 leading-[0.85] tracking-[0.05em] whitespace-nowrap">
+            SIT KOLKATA
+          </h1>
+        </div>
+
+      </footer>
 
     </div>
   );

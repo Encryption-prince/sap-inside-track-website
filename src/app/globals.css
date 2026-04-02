@@ -27,6 +27,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   overflow-x: hidden;
+  scroll-behavior: smooth;
 }
 
 /* Thinner, sharper stroke to match the original design perfectly */
@@ -38,4 +39,14 @@ body {
 @keyframes imgFadeIn {
   from { opacity: 0; transform: scale(1.03); }
   to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes scroll-left {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes scroll-right {
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
 }
