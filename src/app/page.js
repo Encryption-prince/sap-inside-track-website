@@ -692,7 +692,7 @@ export default function Home() {
               <div className="relative w-full max-w-[340px] lg:max-w-[520px] aspect-[4/3] rounded-[1rem] md:rounded-[2rem] overflow-hidden shadow-2xl group">
                 <img
                   key={activeEvent}
-                  src={eventData[activeEvent].image}
+                  src={eventData[activeEvent].image.replace(/ /g, '%20')}
                   alt={eventData[activeEvent].label}
                   className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105"
                   style={{ animation: 'imgFadeIn 0.5s ease' }}
@@ -766,7 +766,7 @@ export default function Home() {
                 {/* Image — fixed height */}
                 <div className="w-full h-[210px] md:h-[240px] overflow-hidden relative shrink-0">
                   <img
-                    src={speaker.image}
+                    src={speaker.image.replace(/ /g, '%20')}
                     alt={speaker.name}
                     className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
                   />
@@ -898,12 +898,12 @@ export default function Home() {
               <h4 className="font-bebas text-[#FFD200] tracking-[0.2em] text-lg">CONTACT</h4>
               <ul className="flex flex-col gap-2 md:gap-3">
                 {[
-                  { label: 'contact@sapinsidetrack.in', icon: 'M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z M22 6l-10 7L2 6' },
+                  { label: 'info@sitkolkata.org', href: 'mailto:info@sitkolkata.org', icon: 'M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z M22 6l-10 7L2 6' },
                   { label: 'Sponsor Us', icon: 'M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z' },
                   { label: 'Call for Speakers', icon: 'M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2 M23 21v-2a4 4 0 00-3-3.87 M16 3.13a4 4 0 010 7.75 M9 7a4 4 0 100 8 4 4 0 000-8z' },
-                ].map(({ label, icon }) => (
+                ].map(({ label, href, icon }) => (
                   <li key={label} className="list-none">
-                    <a href="#" className="flex items-center gap-2 text-xs md:text-sm text-white/50 hover:text-[#FFD200] transition-colors duration-300">
+                    <a href={href || '#'} target={href?.startsWith('mailto') ? '_self' : '_blank'} rel="noopener noreferrer" className="flex items-center gap-2 text-xs md:text-sm text-white/50 hover:text-[#FFD200] transition-colors duration-300">
                       <svg className="w-3 h-3 md:w-4 md:h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d={icon} />
                       </svg>
@@ -925,13 +925,11 @@ export default function Home() {
               <h4 className="font-bebas text-[#FFD200] tracking-[0.2em] text-lg">SOCIALS</h4>
               <ul className="flex flex-col gap-2 md:gap-3">
                 {[
-                  { label: 'LinkedIn', icon: 'M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z M4 6a2 2 0 100-4 2 2 0 000 4z' },
-                  { label: 'Twitter (X)', icon: 'M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z' },
-                  { label: 'Instagram', icon: 'M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zM17.5 6.5h.01M7.5 2h9A5.5 5.5 0 0122 7.5v9a5.5 5.5 0 01-5.5 5.5h-9A5.5 5.5 0 012 16.5v-9A5.5 5.5 0 017.5 2z' },
-                  { label: 'Facebook', icon: 'M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z' },
-                ].map(({ label, icon }) => (
+                  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/sap-inside-track-kolkata/', icon: 'M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z M4 6a2 2 0 100-4 2 2 0 000 4z' },
+                  { label: 'Instagram', href: 'https://www.instagram.com/sitkolkata?igsh=MXFidTkweDNjd3d4dg==', icon: 'M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37zM17.5 6.5h.01M7.5 2h9A5.5 5.5 0 0122 7.5v9a5.5 5.5 0 01-5.5 5.5h-9A5.5 5.5 0 012 16.5v-9A5.5 5.5 0 017.5 2z' },
+                ].map(({ label, href, icon }) => (
                   <li key={label} className="list-none">
-                    <a href="#" className="flex items-center gap-2 text-xs md:text-sm text-white/50 hover:text-[#FFD200] transition-colors duration-300">
+                    <a href={href} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-xs md:text-sm text-white/50 hover:text-[#FFD200] transition-colors duration-300">
                       <svg className="w-3 h-3 md:w-4 md:h-4 shrink-0" fill="none" stroke="currentColor" strokeWidth={1.8} viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" d={icon} />
                       </svg>
