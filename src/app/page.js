@@ -94,7 +94,7 @@ export default function Home() {
     mini1: {
       label: 'MINI SESSION 01',
       description: 'SAP Mini Session 01 — 15th January 2026, Sister Nivedita University.',
-      image: '/past_events/SAP MINI SESSION 01.JPG',
+      image: '/past_events/SAP MINI SESSION 01.jpg',
       pill: 'MINI SESSION 01',
     },
     mini2: {
