@@ -22,6 +22,9 @@ const bebasNeue = Bebas_Neue({
 export const metadata = {
   title: "SAP Inside Track Kolkata",
   description: "Empowering Business Together with SAP",
+  icons: {
+    icon: '/sap-logo.png',
+  },
 };
 
 export default function RootLayout({ children }) {
