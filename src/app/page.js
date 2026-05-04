@@ -43,6 +43,22 @@ function EventCarousel({ images }) {
   );
 }
 
+function InstagramEmbed() {
+  useEffect(() => {
+    // Load Instagram embed script
+    if (window.instgrm) {
+      window.instgrm.Embeds.process();
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://www.instagram.com/embed.js';
+    script.async = true;
+    script.onload = () => window.instgrm?.Embeds.process();
+    document.body.appendChild(script);
+  }, []);
+  return null;
+}
+
 function FAQItem({ question, answer }) {
   const [open, setOpen] = useState(false);
   return (
@@ -114,6 +130,7 @@ export default function Home() {
   const footerWatermarkRef = useRef(null);
   const mediaSectionRef = useRef(null);
   const faqSectionRef = useRef(null);
+  const recapSectionRef = useRef(null);
   const cursorRef = useRef(null);
   const isCarouselHovered = useRef(false);
   const isCarouselDragging = useRef(false);
@@ -398,6 +415,12 @@ export default function Home() {
       { opacity: 0, y: 60 },
       { opacity: 1, y: 0, duration: 1.2, ease: "power2.out",
         scrollTrigger: { trigger: faqSectionRef.current, start: "top 80%", toggleActions: "play none none reset" }
+      }
+    );
+    gsap.fromTo(recapSectionRef.current,
+      { opacity: 0, y: 60 },
+      { opacity: 1, y: 0, duration: 1.2, ease: "power2.out",
+        scrollTrigger: { trigger: recapSectionRef.current, start: "top 80%", toggleActions: "play none none reset" }
       }
     );
 
@@ -723,6 +746,7 @@ export default function Home() {
                 "/past_events/mini_session_01/5.jpg",
                 "/past_events/mini_session_01/6.jpg",
                 "/past_events/mini_session_01/7.jpg",
+                "/past_events/mini_session_01/8.jpg",
               ],
             },
             {
@@ -752,6 +776,13 @@ export default function Home() {
                 "/past_events/sit_2025/3_3.jpg",
                 "/past_events/sit_2025/4_4.jpg",
                 "/past_events/sit_2025/5_5.jpg",
+                "/past_events/sit_2025/6.jpg",
+                "/past_events/sit_2025/7.jpg",
+                "/past_events/sit_2025/8.jpg",
+                "/past_events/sit_2025/9.jpg",
+                "/past_events/sit_2025/10.jpg",
+                "/past_events/sit_2025/11.jpg",
+                "/past_events/sit_2025/12.jpg",
               ],
             },
             {
@@ -882,6 +913,88 @@ export default function Home() {
             ))}
           </div>
         </div>
+
+      </section>
+
+      {/* ==========================================
+          TESTIMONIALS SECTION
+      ========================================== */}
+      <section className="relative w-full bg-black py-20 md:py-28 overflow-hidden">
+
+        {/* Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-[#FFD200]/5 to-transparent blur-3xl pointer-events-none rounded-full"></div>
+
+        {/* Heading */}
+        <div className="relative z-10 text-center mb-12 md:mb-16 px-6">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/10 bg-white/5 mb-5">
+            <svg className="w-3.5 h-3.5 text-[#FFD200]" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+            <span className="font-bebas text-white/70 tracking-widest text-sm">TESTIMONIALS</span>
+          </div>
+          <h2 className="font-koyoto text-white text-[8vw] md:text-[56px] lg:text-[68px] leading-tight">
+            What Our<br /><span className="text-[#FFD200]">Community</span> Says
+          </h2>
+          <p className="font-[family-name:var(--font-inter)] text-white/50 text-sm md:text-base mt-4 max-w-lg mx-auto">
+            Hear from the professionals, students, and enthusiasts who've been part of SAP Inside Track Kolkata.
+          </p>
+        </div>
+
+        {/* Row 1 — scrolls left */}
+        <div className="relative z-10 mb-4 overflow-hidden">
+          <div className="flex gap-4 w-max" style={{ animation: 'scroll-left 40s linear infinite' }}>
+            {[
+              { name: "Koushik Goon", designation: "SAP Architect, BTP & Integration", quote: "SAP Inside Track Kolkata is one of the most well-organized community events I've attended. The quality of sessions and the energy of the audience is truly inspiring.", image: "/past_speakers/Kousik Goon - Chandika Sarkar.png" },
+              { name: "Ritesh Agrawal", designation: "Founder & CEO, Ritzity", quote: "A fantastic platform for SAP professionals to connect, share, and grow. The event brings together the best minds in the SAP ecosystem under one roof.", image: "/past_speakers/Ritesh Agrawal - Chandika Sarkar.png" },
+              { name: "Avijit Dhar", designation: "Application Architect, SAP BTP", quote: "The sessions were deeply technical yet accessible. I left with actionable insights and new connections that have already made a difference in my work.", image: "/past_speakers/AVIJIT DHAR - Chandika Sarkar.png" },
+              { name: "Pankaj Lal", designation: "SAP TMS & YL, Westernacher", quote: "SIT Kolkata stands out for its community spirit. It's not just a conference — it's a movement that's shaping the future of SAP in Eastern India.", image: "/past_speakers/Pankaj Lal - Chandika Sarkar.png" },
+              { name: "Koushik Goon", designation: "SAP Architect, BTP & Integration", quote: "SAP Inside Track Kolkata is one of the most well-organized community events I've attended. The quality of sessions and the energy of the audience is truly inspiring.", image: "/past_speakers/Kousik Goon - Chandika Sarkar.png" },
+              { name: "Ritesh Agrawal", designation: "Founder & CEO, Ritzity", quote: "A fantastic platform for SAP professionals to connect, share, and grow. The event brings together the best minds in the SAP ecosystem under one roof.", image: "/past_speakers/Ritesh Agrawal - Chandika Sarkar.png" },
+              { name: "Avijit Dhar", designation: "Application Architect, SAP BTP", quote: "The sessions were deeply technical yet accessible. I left with actionable insights and new connections that have already made a difference in my work.", image: "/past_speakers/AVIJIT DHAR - Chandika Sarkar.png" },
+              { name: "Pankaj Lal", designation: "SAP TMS & YL, Westernacher", quote: "SIT Kolkata stands out for its community spirit. It's not just a conference — it's a movement that's shaping the future of SAP in Eastern India.", image: "/past_speakers/Pankaj Lal - Chandika Sarkar.png" },
+            ].map((t, i) => (
+              <div key={i} className="w-[320px] md:w-[380px] shrink-0 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 md:p-6 flex flex-col gap-4 hover:border-[#FFD200]/30 transition-colors duration-300">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="font-[family-name:var(--font-inter)] font-bold text-white text-sm md:text-base leading-tight">{t.name}</p>
+                    <p className="font-[family-name:var(--font-inter)] text-white/40 text-xs mt-0.5">{t.designation}</p>
+                  </div>
+                  <img src={t.image} alt={t.name} className="w-10 h-10 rounded-full object-cover object-top shrink-0 border border-white/10" />
+                </div>
+                <p className="font-[family-name:var(--font-inter)] text-white/70 text-sm leading-relaxed">"{t.quote}"</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Row 2 — scrolls right */}
+        <div className="relative z-10 overflow-hidden">
+          <div className="flex gap-4 w-max" style={{ animation: 'scroll-right 40s linear infinite' }}>
+            {[
+              { name: "Sumanta Basu", designation: "Senior Technical Architect, SAP", quote: "The depth of knowledge shared at SIT Kolkata is unmatched. Every session adds value and the networking opportunities are second to none.", image: "/past_speakers/Sumanta Basu - Chandika Sarkar.png" },
+              { name: "Partho Goswami", designation: "CTO & Founder, NexGenCompany.ai", quote: "SIT Kolkata is where innovation meets community. The event perfectly blends technical excellence with real-world business impact.", image: "/past_speakers/Partha Goswami - Chandika Sarkar.png" },
+              { name: "Arit Basu", designation: "Principal Consultant, SAP", quote: "An incredible event that brings the SAP community together. The passion and dedication of the organizers is evident in every detail.", image: "/past_speakers/Arit Basu - Chandika Sarkar.png" },
+              { name: "Pritam Paul", designation: "Senior Resident Solution Architect", quote: "SIT Kolkata gave me the opportunity to share my knowledge and learn from peers. It's a must-attend for anyone in the SAP ecosystem.", image: "/past_speakers/pritam - Chandika Sarkar.png" },
+              { name: "Sumanta Basu", designation: "Senior Technical Architect, SAP", quote: "The depth of knowledge shared at SIT Kolkata is unmatched. Every session adds value and the networking opportunities are second to none.", image: "/past_speakers/Sumanta Basu - Chandika Sarkar.png" },
+              { name: "Partho Goswami", designation: "CTO & Founder, NexGenCompany.ai", quote: "SIT Kolkata is where innovation meets community. The event perfectly blends technical excellence with real-world business impact.", image: "/past_speakers/Partha Goswami - Chandika Sarkar.png" },
+              { name: "Arit Basu", designation: "Principal Consultant, SAP", quote: "An incredible event that brings the SAP community together. The passion and dedication of the organizers is evident in every detail.", image: "/past_speakers/Arit Basu - Chandika Sarkar.png" },
+              { name: "Pritam Paul", designation: "Senior Resident Solution Architect", quote: "SIT Kolkata gave me the opportunity to share my knowledge and learn from peers. It's a must-attend for anyone in the SAP ecosystem.", image: "/past_speakers/pritam - Chandika Sarkar.png" },
+            ].map((t, i) => (
+              <div key={i} className="w-[320px] md:w-[380px] shrink-0 rounded-2xl border border-white/10 bg-white/5 backdrop-blur-sm p-5 md:p-6 flex flex-col gap-4 hover:border-[#FFD200]/30 transition-colors duration-300">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="font-[family-name:var(--font-inter)] font-bold text-white text-sm md:text-base leading-tight">{t.name}</p>
+                    <p className="font-[family-name:var(--font-inter)] text-white/40 text-xs mt-0.5">{t.designation}</p>
+                  </div>
+                  <img src={t.image} alt={t.name} className="w-10 h-10 rounded-full object-cover object-top shrink-0 border border-white/10" />
+                </div>
+                <p className="font-[family-name:var(--font-inter)] text-white/70 text-sm leading-relaxed">"{t.quote}"</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Fade edges */}
+        <div className="absolute top-0 left-0 h-full w-24 md:w-40 bg-gradient-to-r from-black to-transparent z-20 pointer-events-none"></div>
+        <div className="absolute top-0 right-0 h-full w-24 md:w-40 bg-gradient-to-l from-black to-transparent z-20 pointer-events-none"></div>
 
       </section>
 
@@ -1075,6 +1188,59 @@ export default function Home() {
       {/* ==========================================
           FAQ SECTION
       ========================================== */}
+
+      {/* ==========================================
+          2025 RECAP SECTION
+      ========================================== */}
+      <section ref={recapSectionRef} className="relative w-full bg-black py-20 md:py-28 px-6 md:px-[8%] overflow-hidden">
+
+        {/* Glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-[radial-gradient(circle,_var(--tw-gradient-stops))] from-[#FFD200]/5 to-transparent blur-3xl pointer-events-none rounded-full"></div>
+
+        <div className="relative z-10 max-w-4xl mx-auto flex flex-col items-center text-center">
+
+          {/* Heading */}
+          <div className="mb-10 md:mb-14">
+            <p className="font-bebas text-[#FFD200] tracking-[0.3em] text-sm md:text-base mb-3">RELIVE THE MOMENT</p>
+            <h2 className="font-koyoto text-white text-[8vw] md:text-[56px] lg:text-[68px] leading-tight">
+              SAP INSIDE TRACK<br /><span className="text-[#FFD200]">KOLKATA 2025</span> RECAP
+            </h2>
+            <div className="w-16 h-[3px] bg-[#FFD200] mt-5 rounded-full mx-auto"></div>
+          </div>
+
+          {/* Instagram Reel embed */}
+          <div className="w-full max-w-[400px] rounded-2xl overflow-hidden border border-white/10 shadow-[0_0_60px_rgba(255,210,0,0.08)]">
+            <blockquote
+              className="instagram-media"
+              data-instgrm-permalink="https://www.instagram.com/reel/DX4kks0t5pj/?igsh=N204bnVnZ2V3dWIx"
+              data-instgrm-version="14"
+              style={{
+                background: '#000',
+                border: 0,
+                borderRadius: '16px',
+                margin: 0,
+                maxWidth: '100%',
+                minWidth: '326px',
+                padding: 0,
+                width: '100%',
+              }}
+            >
+              <div style={{ padding: '16px' }}>
+                <a
+                  href="https://www.instagram.com/reel/DX4kks0t5pj/?igsh=N204bnVnZ2V3dWIx"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-[family-name:var(--font-inter)] text-[#FFD200] text-sm underline"
+                >
+                  View SAP Inside Track Kolkata 2025 Recap on Instagram
+                </a>
+              </div>
+            </blockquote>
+            <InstagramEmbed />
+          </div>
+
+        </div>
+      </section>
       <section id="faq" ref={faqSectionRef} className="relative w-full bg-black py-20 md:py-32 px-6 md:px-[8%] overflow-hidden">
 
         {/* Subtle glow */}
