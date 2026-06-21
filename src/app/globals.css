@@ -1,11 +1,47 @@
 @import "tailwindcss";
 
-/* Load Custom Font */
+/* Load Custom Fonts */
 @font-face {
   font-family: 'Koyoto';
   src: url('/fonts/Kyoto.otf') format('opentype');
   font-weight: normal;
   font-style: normal;
+}
+
+@font-face {
+  font-family: 'Excon';
+  src: url('/fonts/Excon_Complete/WEB/fonts/Excon-Black.woff2') format('woff2'),
+       url('/fonts/Excon_Complete/WEB/fonts/Excon-Black.woff') format('woff');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Excon';
+  src: url('/fonts/Excon_Complete/WEB/fonts/Excon-Bold.woff2') format('woff2'),
+       url('/fonts/Excon_Complete/WEB/fonts/Excon-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ClashDisplay';
+  src: url('/fonts/ClashDisplay_Complete/WEB/fonts/ClashDisplay-Bold.woff2') format('woff2'),
+       url('/fonts/ClashDisplay_Complete/WEB/fonts/ClashDisplay-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'ClashDisplay';
+  src: url('/fonts/ClashDisplay_Complete/WEB/fonts/ClashDisplay-Semibold.woff2') format('woff2'),
+       url('/fonts/ClashDisplay_Complete/WEB/fonts/ClashDisplay-Semibold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
 }
 
 :root {
@@ -19,6 +55,8 @@
   
   --font-bebas: 'Bebas Neue', sans-serif;
   --font-koyoto: 'Koyoto', sans-serif;
+  --font-excon: 'Excon', sans-serif;
+  --font-clash: 'ClashDisplay', sans-serif;
   --font-inter: var(--font-inter);
   --font-montserrat: var(--font-montserrat);
 }

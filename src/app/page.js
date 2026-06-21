@@ -91,6 +91,7 @@ function FAQItem({ question, answer }) {
 export default function Home() {
   // Hero Refs
   const heroSectionRef = useRef(null);
+  const gridRef = useRef(null);
   const chainRef = useRef(null);
   const textRef = useRef(null);
   const pillRef = useRef(null);
@@ -248,17 +249,15 @@ export default function Home() {
     // ==========================================
     // 1. HERO SECTION ANIMATIONS
     // ==========================================
-    if (chainRef.current) {
-      gsap.fromTo(chainRef.current,
-        { opacity: 0 },
-        {
-          opacity: 1, duration: 1.8, ease: "power2.out", onComplete: () => {
-            gsap.to(chainRef.current, { y: 12, duration: 3, ease: "sine.inOut", repeat: -1, yoyo: true });
-            gsap.to(chainRef.current, { x: 6, duration: 4, ease: "sine.inOut", repeat: -1, yoyo: true });
-            gsap.to(chainRef.current, { rotation: 0.8, duration: 3.5, ease: "sine.inOut", repeat: -1, yoyo: true });
-          }
-        }
-      );
+    // Grid floating effect — slow, subtle drift
+    if (gridRef.current) {
+      gsap.to(gridRef.current, {
+        y: -18, x: 8,
+        duration: 8,
+        ease: "sine.inOut",
+        repeat: -1,
+        yoyo: true,
+      });
     }
 
     gsap.fromTo(
@@ -275,20 +274,7 @@ export default function Home() {
       gsap.fromTo(pillRef.current, { opacity: 0, x: -60 }, { opacity: 1, x: 0, duration: 1.2, ease: "power2.out", delay: 0.6 });
     }
 
-    kolkataRefs.current.forEach((el, i) => {
-      if (!el) return;
-      gsap.fromTo(
-        el,
-        { opacity: 0, y: 30 },
-        {
-          opacity: i === 0 ? 1 : [0.6, 0.30, 0.1, 0.04][i - 1],
-          y: 0,
-          duration: 0.8,
-          ease: "power2.out",
-          delay: 0.8 + i * 0.15,
-        }
-      );
-    });
+    // KOLKATA image inherits fade from textRef — no separate animation needed
 
     // ==========================================
     // 2. ABOUT US SCROLL ANIMATION
@@ -591,10 +577,18 @@ export default function Home() {
       </div>
 
       {/* --- HERO SECTION --- */}
-      <section id="home" ref={heroSectionRef} className="relative w-full h-screen overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <Image src="/hero-background.png" alt="Dark noisy background" fill priority className="object-cover opacity-80" />
-        </div>
+      <section id="home" ref={heroSectionRef} className="relative w-full h-screen overflow-hidden bg-black">
+        {/* Grid background with floating effect */}
+        <div
+          ref={gridRef}
+          className="absolute inset-0 z-0 pointer-events-none"
+          style={{
+            backgroundImage: `url('/Black grid Wallpaper 1.png')`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.6,
+          }}
+        />
 
         <div className="absolute top-6 left-[4%] md:left-[6%] z-30 flex items-center">
           <Image src="/sap-logo.png" alt="SAP Inside Track Kolkata" width={160} height={90} className="object-contain" />
@@ -609,35 +603,63 @@ export default function Home() {
           ))}
         </div>
 
-        <div ref={pillRef} className="absolute bottom-35 md:bottom-20 left-[24%] md:left-[6%] z-30 opacity-0">
-          <div className="px-7 md:px-10 py-2.5 md:py-3 rounded-full border border-white/10 bg-white/10 backdrop-blur-md flex items-center gap-3 md:gap-8 shadow-2xl">
-            <span className="font-bebas text-base md:text-[22px] text-white tracking-widest mt-1">INNOVATE</span>
-            <span className="font-bebas text-base md:text-[22px] text-white tracking-widest mt-1">CONNECT</span>
-            <span className="font-bebas text-base md:text-[22px] text-white tracking-widest mt-1">LEARN</span>
+        {/* INNOVATE CONNECT LEARN pill — dark wide rectangle, left-aligned */}
+        <div ref={pillRef} className="absolute bottom-[28%] md:bottom-[38%] left-0 z-30 opacity-0">
+          <div className="pl-[4%] md:pl-[6%] pr-8 md:pr-12 py-2.5 md:py-3 rounded-r-full flex items-center gap-4 md:gap-7 border-r border-t border-b border-white/20" style={{ background: 'linear-gradient(to right, #3a3a3a, #2a2a2a)' }}>
+            <span className="font-bebas text-base md:text-[20px] text-white tracking-widest">INNOVATE</span>
+            <span className="font-bebas text-base md:text-[20px] text-white tracking-widest">CONNECT</span>
+            <span className="font-bebas text-base md:text-[20px] text-white tracking-widest">LEARN</span>
           </div>
         </div>
 
-        <div ref={textRef} className="absolute top-[30%] md:top-[28%] left-0 w-full h-full z-20 pointer-events-none opacity-0">
-          <div className="absolute left-[2%] md:left-[6%]">
-            <h1 className="font-koyoto text-[40vw] md:text-[220px] lg:text-[260px] xl:text-[300px] leading-[0.75] text-white">
+        <div ref={textRef} className="absolute inset-0 w-full h-full z-20 pointer-events-none opacity-0 left-[2%]">
+
+          {/* SAP — independent, top-left */}
+          <div className="absolute top-[18%] left-[4%] md:left-[10%]">
+            <h1 className="font-excon text-[28vw] md:text-[20vw] lg:text-[220px] leading-[0.82] text-white whitespace-nowrap font-black">
               S<span className="text-[#FFD200] md:text-white">A</span>P
             </h1>
           </div>
-          <div className="absolute top-[18%] md:top-[5%] left-[30%] md:left-[48%] pr-[4%] md:pr-[10%] flex flex-col items-start">
-            <h1 className="font-koyoto text-[11vw] md:text-[85px] lg:text-[100px] xl:text-[118px] leading-[0.85] text-white tracking-wide whitespace-nowrap">
-              INSIDE TR<span className="text-[#FFD200] md:text-white">A</span>CK
+
+          {/* INSIDE TRACK — independent, position freely */}
+          <div className="absolute top-[19%] left-[38%] md:left-[42%]">
+            <h1 className="font-excon text-[8vw] md:text-[6.5vw] lg:text-[74px] leading-[1] tracking-wide whitespace-nowrap font-black">
+              <span className="text-[#FFD200]">INSIDE </span><span className="text-white">TRACK</span>
             </h1>
-            <h2 ref={(el) => (kolkataRefs.current[0] = el)} className="font-koyoto text-[11vw] md:text-[85px] lg:text-[100px] xl:text-[118px] leading-[0.85] text-[#FFD200] tracking-wide mt-1 ml-[33%] md:ml-[33%] opacity-0">
-              KOLKATA
-            </h2>
-            <div className="flex flex-col -space-y-1 md:-space-y-0 lg:-space-y-2 mt-[-4px] md:mt-[-16px] ml-[33%] md:ml-[33%]">
-              {[0.6, 0.30, 0.1, 0.04].map((opacity, i) => (
-                <h2 key={i} ref={(el) => (kolkataRefs.current[i + 1] = el)} className="font-koyoto text-[11vw] md:text-[85px] lg:text-[100px] xl:text-[118px] leading-[0.85] text-outline-yellow tracking-wide opacity-0">
-                  KOLKATA
-                </h2>
-              ))}
-            </div>
           </div>
+
+          {/* KOLKATA image — independent, position freely */}
+          <div className="absolute top-[32%] md:top-[13%] right-[3%] md:right-[20.5%]">
+            <img
+              src="/KOLKATA TEXT.png"
+              alt="KOLKATA"
+              className="w-[42vw] md:w-[34vw] lg:w-[528px] h-auto object-contain"
+            />
+          </div>
+
+          {/* 2026 — independent, position freely */}
+          <div className="absolute top-[48%] md:top-[41%] right-[3%] md:right-[22%]">
+            <h2 className="font-clash text-[7vw] md:text-[5.5vw] lg:text-[64px] leading-tight text-white tracking-wide font-bold">
+              2026
+            </h2>
+          </div>
+
+        </div>
+
+        {/* Coming Soon button — centered */}
+        <div className="absolute bottom-[14%] md:bottom-[26%] left-1/2 -translate-x-1/2 z-30">
+          <button className="px-8 md:px-10 py-2.5 md:py-3 rounded-full bg-[#FFD200] text-black font-[family-name:var(--font-inter)] font-bold text-sm md:text-base hover:bg-white transition-colors duration-300 shadow-[0_0_24px_rgba(255,210,0,0.4)] border-2 border-white/30 ring-1 ring-white/10">
+            Coming Soon
+          </button>
+        </div>
+
+        {/* Howrah Bridge — anchored to bottom, full structure visible */}
+        <div className="absolute bottom-0 left-0 w-full z-10 pointer-events-none overflow-hidden" style={{ height: '65%', marginBottom: '-6%'}}>
+          <img
+            src="/Howrah Bridge 1.png"
+            alt="Howrah Bridge"
+            className="w-full h-full object-contain object-bottom"
+          />
         </div>
 
         {/* Mobile hamburger nav */}
@@ -658,9 +680,6 @@ export default function Home() {
           </details>
         </div>
 
-        <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
-          <img ref={chainRef} src="/hero-chain.png" alt="Floating chain" className="h-[110vh] md:h-[105vh] w-auto object-contain max-w-none opacity-0" />
-        </div>
       </section>
 
       {/* --- ABOUT US SECTION --- */}
