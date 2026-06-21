@@ -605,7 +605,7 @@ export default function Home() {
 
         {/* INNOVATE CONNECT LEARN pill — dark wide rectangle, left-aligned */}
         <div ref={pillRef} className="absolute bottom-[28%] md:bottom-[38%] left-0 z-30 opacity-0">
-          <div className="pl-[4%] md:pl-[6%] pr-8 md:pr-12 py-2.5 md:py-3 rounded-r-full flex items-center gap-4 md:gap-7 border-r border-t border-b border-white/20" style={{ background: 'linear-gradient(to right, #3a3a3a, #2a2a2a)' }}>
+          <div className="pl-[4%] md:pl-[6%] pr-8 md:pr-12 py-2.5 md:py-3 rounded-r-full flex items-center gap-4 md:gap-7 border-r border-t border-b border-white/20 hero-shadow" style={{ background: 'linear-gradient(to right, #3a3a3a, #2a2a2a)' }}>
             <span className="font-bebas text-base md:text-[20px] text-white tracking-widest">INNOVATE</span>
             <span className="font-bebas text-base md:text-[20px] text-white tracking-widest">CONNECT</span>
             <span className="font-bebas text-base md:text-[20px] text-white tracking-widest">LEARN</span>
@@ -616,14 +616,14 @@ export default function Home() {
 
           {/* SAP — independent, top-left */}
           <div className="absolute top-[18%] left-[4%] md:left-[10%]">
-            <h1 className="font-excon text-[120px] md:text-[17vw] leading-[0.82] text-white whitespace-nowrap font-black">
+            <h1 className="font-excon text-[120px] md:text-[17vw] leading-[0.82] text-white whitespace-nowrap font-black hero-text-shadow">
               S<span className="text-[#FFD200] md:text-white">A</span>P
             </h1>
           </div>
 
           {/* INSIDE TRACK — independent, position freely */}
           <div className="absolute top-[19%] left-[38%] md:left-[44%]">
-            <h1 className="font-excon text-[40px] md:text-[5.8vw] leading-[1] tracking-wide whitespace-nowrap font-black">
+            <h1 className="font-excon text-[40px] md:text-[5.8vw] leading-[1] tracking-wide whitespace-nowrap font-black hero-text-shadow">
               <span className="text-[#FFD200]">INSIDE </span><span className="text-white">TRACK</span>
             </h1>
           </div>
@@ -633,13 +633,13 @@ export default function Home() {
             <img
               src="/KOLKATA TEXT.png"
               alt="KOLKATA"
-              className="w-[220px] md:w-[43vw] h-auto object-contain"
+              className="w-[220px] md:w-[43vw] h-auto object-contain hero-shadow"
             />
           </div>
 
           {/* 2026 — independent, position freely */}
           <div className="absolute top-[48%] md:top-[43%] right-[3%] md:right-[14%]">
-            <h2 className="font-clash text-[36px] md:text-[4.5vw] leading-tight text-white tracking-wide font-bold">
+            <h2 className="font-clash text-[36px] md:text-[4.5vw] leading-tight text-white tracking-wide font-bold hero-text-shadow">
               2026
             </h2>
           </div>
@@ -648,7 +648,7 @@ export default function Home() {
 
         {/* Coming Soon button — centered */}
         <div className="absolute bottom-[14%] md:bottom-[26%] left-1/2 -translate-x-1/2 z-30">
-          <button className="px-8 md:px-10 py-2.5 md:py-3 rounded-full bg-[#FFD200] text-black font-[family-name:var(--font-inter)] font-bold text-sm md:text-base hover:bg-white transition-colors duration-300 shadow-[0_0_24px_rgba(255,210,0,0.4)] border-2 border-white/30 ring-1 ring-white/10">
+          <button className="px-8 md:px-10 py-2.5 md:py-3 rounded-full bg-[#FFD200] text-black font-[family-name:var(--font-inter)] font-bold text-sm md:text-base hover:bg-white transition-colors duration-300 shadow-[0_0_40px_rgba(0,0,0,0.8),0_0_24px_rgba(255,210,0,0.4)] border-2 border-white/30 ring-1 ring-white/10">
             Coming Soon
           </button>
         </div>
@@ -658,7 +658,7 @@ export default function Home() {
           <img
             src="/Howrah Bridge 1.png"
             alt="Howrah Bridge"
-            className="w-full h-full object-contain object-bottom"
+            className="w-full h-full object-contain object-bottom hero-shadow"
           />
         </div>
 
