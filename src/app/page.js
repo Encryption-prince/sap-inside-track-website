@@ -616,14 +616,14 @@ export default function Home() {
 
           {/* SAP — independent, top-left */}
           <div className="absolute top-[18%] left-[4%] md:left-[10%]">
-            <h1 className="font-excon text-[28vw] md:text-[20vw] lg:text-[220px] leading-[0.82] text-white whitespace-nowrap font-black">
+            <h1 className="font-excon text-[120px] md:text-[180px] lg:text-[220px] leading-[0.82] text-white whitespace-nowrap font-black">
               S<span className="text-[#FFD200] md:text-white">A</span>P
             </h1>
           </div>
 
           {/* INSIDE TRACK — independent, position freely */}
           <div className="absolute top-[19%] left-[38%] md:left-[42%]">
-            <h1 className="font-excon text-[8vw] md:text-[6.5vw] lg:text-[74px] leading-[1] tracking-wide whitespace-nowrap font-black">
+            <h1 className="font-excon text-[40px] md:text-[60px] lg:text-[74px] leading-[1] tracking-wide whitespace-nowrap font-black">
               <span className="text-[#FFD200]">INSIDE </span><span className="text-white">TRACK</span>
             </h1>
           </div>
@@ -633,13 +633,13 @@ export default function Home() {
             <img
               src="/KOLKATA TEXT.png"
               alt="KOLKATA"
-              className="w-[42vw] md:w-[34vw] lg:w-[528px] h-auto object-contain"
+              className="w-[220px] md:w-[380px] lg:w-[528px] h-auto object-contain"
             />
           </div>
 
           {/* 2026 — independent, position freely */}
           <div className="absolute top-[48%] md:top-[41%] right-[3%] md:right-[22%]">
-            <h2 className="font-clash text-[7vw] md:text-[5.5vw] lg:text-[64px] leading-tight text-white tracking-wide font-bold">
+            <h2 className="font-clash text-[36px] md:text-[52px] lg:text-[64px] leading-tight text-white tracking-wide font-bold">
               2026
             </h2>
           </div>
