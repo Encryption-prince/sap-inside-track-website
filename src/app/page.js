@@ -97,6 +97,8 @@ export default function Home() {
   const pillRef = useRef(null);
   const kolkataRefs = useRef([]);
   const navRefs = useRef([]);
+  const comingSoonRef = useRef(null);
+  const bridgeRef = useRef(null);
 
   // About Us Refs
   const aboutSectionRef = useRef(null);
@@ -205,7 +207,7 @@ export default function Home() {
     { id: 28, name: "Vishwa Vivek Anand",      designation: "Global Head, SAP Analytics CoE at TCS",                    image: "/past_speakers/viswa - Chandika Sarkar.png" },
     { id: 29, name: "Manoj Mishra",            designation: "Head SAP & Applications, Century Plyboards India",         image: "/past_speakers/manoj - Chandika Sarkar.png" },
     { id: 30, name: "Prof. Amlan Chakrabarti", designation: "Professor & Director, A.K. Choudhury School of IT, CU",    image: "/past_speakers/Amlan - Diya Dasgupta.png" },
-    { id: 31, name: "Dr. Saptarsi Goswami",   designation: "Asst. Prof Comp Sc, AI Researcher",                        image: "/past_speakers/saptarsi goswami - Diya Dasgupta.png" },
+    // { id: 31, name: "Dr. Saptarsi Goswami",   designation: "Asst. Prof Comp Sc, AI Researcher",                        image: "/past_speakers/saptarsi goswami - Diya Dasgupta.png" },
     { id: 32, name: "Sabyasachi Biswas",       designation: "Chief Executive Officer @ VIKI.AI",                        image: "/past_speakers/sabyasachi biswas - Diya Dasgupta.png" },
   ];
   // Duplicating for the infinite seamless loop effect
@@ -276,16 +278,19 @@ export default function Home() {
 
     // KOLKATA image inherits fade from textRef — no separate animation needed
 
+    // Coming Soon button fade in
+    if (comingSoonRef.current) {
+      gsap.fromTo(comingSoonRef.current, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 1, ease: "power2.out", delay: 1.0 });
+    }
+
+    // Bridge fade in from bottom
+    if (bridgeRef.current) {
+      gsap.fromTo(bridgeRef.current, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.4, ease: "power2.out", delay: 0.8 });
+    }
+
     // ==========================================
     // 2. ABOUT US SCROLL ANIMATION
     // ==========================================
-    ScrollTrigger.create({
-      trigger: heroSectionRef.current,
-      start: "bottom center",
-      end: "bottom top",
-      pin: true,
-      pinSpacing: false,
-    });
 
     const tlAbout = gsap.timeline({
       scrollTrigger: {
@@ -647,14 +652,14 @@ export default function Home() {
         </div>
 
         {/* Coming Soon button — centered */}
-        <div className="absolute bottom-[14%] md:bottom-[26%] left-1/2 -translate-x-1/2 z-30">
+        <div ref={comingSoonRef} className="absolute bottom-[14%] md:bottom-[26%] left-1/2 -translate-x-1/2 z-30 opacity-0">
           <button className="px-8 md:px-10 py-2.5 md:py-3 rounded-full bg-[#FFD200] text-black font-[family-name:var(--font-inter)] font-bold text-sm md:text-base hover:bg-white transition-colors duration-300 shadow-[0_0_40px_rgba(0,0,0,0.8),0_0_24px_rgba(255,210,0,0.4)] border-2 border-white/30 ring-1 ring-white/10">
             Coming Soon
           </button>
         </div>
 
         {/* Howrah Bridge — anchored to bottom, full structure visible */}
-        <div className="absolute bottom-0 left-0 w-full z-10 pointer-events-none overflow-hidden" style={{ height: '65%', marginBottom: '-6%'}}>
+        <div ref={bridgeRef} className="absolute bottom-0 left-0 w-full z-10 pointer-events-none overflow-hidden opacity-0" style={{ height: '65%', marginBottom: '-6%'}}>
           <img
             src="/Howrah Bridge 1.png"
             alt="Howrah Bridge"
