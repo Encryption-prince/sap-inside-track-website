@@ -654,10 +654,11 @@ export default function Home() {
 
         {/* Coming Soon button — centered */}
         <div ref={comingSoonRef} className="absolute bottom-[14%] md:bottom-[26%] left-1/2 -translate-x-1/2 z-30 opacity-0">
-<Link href="https://konfhub.com/sap-inside-track-kolkata-2026" passHref legacyBehavior>
-          <button className="px-8 md:px-10 py-2.5 md:py-3 rounded-full bg-[#FFD200] text-black font-[family-name:var(--font-inter)] font-bold text-sm md:text-base hover:bg-white transition-colors duration-300 shadow-[0_0_40px_rgba(0,0,0,0.8),0_0_24px_rgba(255,210,0,0.4)] border-2 border-white/30 ring-1 ring-white/10">
-            Tickets are Live
-          </button>
+          <Link 
+  href="https://konfhub.com/sap-inside-track-kolkata-2026" 
+  className="px-8 md:px-10 py-2.5 md:py-3 rounded-full bg-[#FFD200] text-black font-[family-name:var(--font-inter)] font-bold text-sm md:text-base hover:bg-white transition-colors duration-300 shadow-[0_0_40px_rgba(0,0,0,0.8),0_0_24px_rgba(255,210,0,0.4)] border-2 border-white/30 ring-1 ring-white/10 inline-block text-center"
+>
+  Tickets are Live
 </Link>
         </div>
 
